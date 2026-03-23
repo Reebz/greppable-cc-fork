@@ -1,0 +1,14 @@
+{
+  "name": "src2gdlc",
+  "version": "0.2.0",
+  "description": "Multi-language source to GDLC skeleton extractor via tree-sitter",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "extract": "node index.js",
+    "test": "node --test test.js"
+  },
+  "dependencies": {
+    "web-tree-sitter": "^0.26.6"
+  }
+}

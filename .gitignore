@@ -1,0 +1,5 @@
+# OS
+.DS_Store
+
+# Node (src2gdlc has a package.json)
+node_modules/
