@@ -76,7 +76,7 @@ gh pr diff {n} -- path/to/specific/file.ts
 Use the helper to find top changed files:
 
 ```bash
-source scripts/pr-summary-extract.sh
+source "${CLAUDE_PLUGIN_ROOT}/scripts/pr-summary-extract.sh"
 FILES_JSON=$(gh pr view {n} --json files --jq '.files')
 top_changed_files "$FILES_JSON" 10
 ```
@@ -94,7 +94,7 @@ gh pr view {n} --json commits --jq '.commits[].messageHeadline'
 - Literal `:` → `\:`
 - Literal `\` → `\\`
 
-Use the helper: `source scripts/pr-summary-extract.sh` and call `escape_gdl_value`.
+Use the helper: `source "${CLAUDE_PLUGIN_ROOT}/scripts/pr-summary-extract.sh"` and call `escape_gdl_value`.
 
 Or apply manually: avoid literal pipes and colons in summaries. Rephrase if needed.
 

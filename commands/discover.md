@@ -25,7 +25,7 @@ Scan the project structure and generate GDL artifacts that document the codebase
 
 2. **Run bridge detection pre-scanner**:
    ```bash
-   bash scripts/gdl-prescan.sh <target_dir> --json
+   bash "${CLAUDE_PLUGIN_ROOT}/scripts/gdl-prescan.sh" <target_dir> --json
    ```
    This detects which bridge tools can generate skeletons automatically (code maps via src2gdlc, schema maps via sql2gdls/prisma2gdls/db2gdls).
 
@@ -53,14 +53,14 @@ Scan the project structure and generate GDL artifacts that document the codebase
    For each bridge detected by prescan, execute the recommended command with actual paths substituted:
    ```bash
    # Example: Code maps
-   bash scripts/src2gdlc.sh <target_dir> --output=<gdl_root>/code --recursive --lang=typescript
-   bash scripts/src2gdlc.sh <target_dir> --output=<gdl_root>/code --recursive --lang=python
+   bash "${CLAUDE_PLUGIN_ROOT}/scripts/src2gdlc.sh" <target_dir> --output=<gdl_root>/code --recursive --lang=typescript
+   bash "${CLAUDE_PLUGIN_ROOT}/scripts/src2gdlc.sh" <target_dir> --output=<gdl_root>/code --recursive --lang=python
    # Example: Schema maps (iterate over individual files)
-   for f in <migrations_dir>/*.sql; do bash scripts/sql2gdls.sh "$f" --output=<gdl_root>/schema; done
-   for f in <schema_dir>/*.prisma; do bash scripts/prisma2gdls.sh "$f" --output=<gdl_root>/schema; done
+   for f in <migrations_dir>/*.sql; do bash "${CLAUDE_PLUGIN_ROOT}/scripts/sql2gdls.sh" "$f" --output=<gdl_root>/schema; done
+   for f in <schema_dir>/*.prisma; do bash "${CLAUDE_PLUGIN_ROOT}/scripts/prisma2gdls.sh" "$f" --output=<gdl_root>/schema; done
    # Example: API contracts
-   for f in <api_dir>/*.json <api_dir>/*.yaml; do bash scripts/openapi2gdla.sh "$f" --output=<gdl_root>/api; done
-   for f in <schema_dir>/*.graphql; do bash scripts/graphql2gdla.sh "$f" --output=<gdl_root>/api; done
+   for f in <api_dir>/*.json <api_dir>/*.yaml; do bash "${CLAUDE_PLUGIN_ROOT}/scripts/openapi2gdla.sh" "$f" --output=<gdl_root>/api; done
+   for f in <schema_dir>/*.graphql; do bash "${CLAUDE_PLUGIN_ROOT}/scripts/graphql2gdla.sh" "$f" --output=<gdl_root>/api; done
    ```
    Track failures: if a bridge fails, log warning and continue with remaining bridges.
    Report both successful and failed bridges before proceeding.
@@ -101,7 +101,7 @@ Always report progress to the user directly in your response text. Do not suppre
 
 ## Post-Discovery
 
-1. Run `bash scripts/gdl-lint.sh --all <gdl_root> --strict` on all generated files
+1. Run `bash "${CLAUDE_PLUGIN_ROOT}/scripts/gdl-lint.sh" --all <gdl_root> --strict` on all generated files
 2. Report: "Created X files across Y layers. Run `/greppable:status` to see inventory."
 3. **Generate seed memories** — create 3-5 @memory records capturing:
    - **Architecture observation**: "Project uses [pattern/framework] — key modules are [X, Y, Z]"
@@ -113,7 +113,7 @@ Always report progress to the user directly in your response text. Do not suppre
    `bash -c 'mkdir -p memory/active && touch memory/active/seed.gdlm'`
 
    Then for each seed memory:
-   `bash -c 'source scripts/gdl-tools.sh && gdl_new memory --agent=discover --subject="[title]" --detail="[specifics]" --type=observation --tags=architecture,seed --file=memory/active/seed.gdlm --append'`
+   `bash -c 'source "${CLAUDE_PLUGIN_ROOT}/scripts/gdl-tools.sh" && gdl_new memory --agent=discover --subject="[title]" --detail="[specifics]" --type=observation --tags=architecture,seed --file=memory/active/seed.gdlm --append'`
 
    These seed memories bootstrap the memory layer so future agents have immediate context.
 
@@ -144,7 +144,7 @@ Always report progress to the user directly in your response text. Do not suppre
    mkdir -p <gdl_root>/data
    echo '@rule|scope:GLOB|severity:LEVEL|desc:TEXT' >> <gdl_root>/data/rules.gdl
    ```
-   Then validate: `bash scripts/gdl-lint.sh <gdl_root>/data/rules.gdl`
+   Then validate: `bash "${CLAUDE_PLUGIN_ROOT}/scripts/gdl-lint.sh" <gdl_root>/data/rules.gdl`
 
 5. **Report activation summary**:
    ```

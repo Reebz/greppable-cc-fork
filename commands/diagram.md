@@ -34,18 +34,18 @@ Create or update a GDLD architecture diagram from current context.
 @gotcha|severity:{1-3}|area:{area}|symptom:{symptom}|fix:{fix}
 ```
 
-5. **Validate**: `bash scripts/gdl-lint.sh <output.gdld>`
+5. **Validate**: `bash "${CLAUDE_PLUGIN_ROOT}/scripts/gdl-lint.sh" <output.gdld>`
 
-6. **Render preview**: `bash scripts/gdld2mermaid.sh <output.gdld>`
+6. **Render preview**: `bash "${CLAUDE_PLUGIN_ROOT}/scripts/gdld2mermaid.sh" <output.gdld>`
 
 7. **Write to file**: Save to `docs/gdl/diagrams/<name>.gdld` (or user-specified path).
 
 ## Conversion Shortcut
 
 Can also convert existing formats to diagrams:
-- `.gdlc` → `.gdld`: `bash scripts/gdlc2gdld.sh <file.gdlc>`
-- `.gdls` → `.gdld`: `bash scripts/gdls2gdld.sh <file.gdls>`
-- `.gdlu` → `.gdld`: `bash scripts/gdlu2gdld.sh <file.gdlu>`
+- `.gdlc` → `.gdld`: `bash "${CLAUDE_PLUGIN_ROOT}/scripts/gdlc2gdld.sh" <file.gdlc>`
+- `.gdls` → `.gdld`: `bash "${CLAUDE_PLUGIN_ROOT}/scripts/gdls2gdld.sh" <file.gdls>`
+- `.gdlu` → `.gdld`: `bash "${CLAUDE_PLUGIN_ROOT}/scripts/gdlu2gdld.sh" <file.gdlu>`
 
 ## Examples
 

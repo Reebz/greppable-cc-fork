@@ -48,7 +48,7 @@ Then say: **Welcome! Let's set up greppable for this project.**
 6. **Ask: where should GDL artifacts live?** Default: `docs/gdl`
 
 7. **Run prescan for exclusion suggestions** (if GDLC layer is enabled):
-   - Run: `bash scripts/gdl-prescan.sh <project_dir> --json`
+   - Run: `bash "${CLAUDE_PLUGIN_ROOT}/scripts/gdl-prescan.sh" <project_dir> --json`
    - If `suggested_exclusions` is non-empty in the JSON output:
      - Show: "Detected [framework] at [path]. Recommend excluding from code mapping."
      - Ask: "Add suggested exclusions to .gdlignore? You can edit this later with /greppable:ignore"
@@ -58,7 +58,7 @@ Then say: **Welcome! Let's set up greppable for this project.**
 8. **Run the setup script** with the user's choices from steps 3-7:
 
 ```bash
-bash scripts/gdl-onboard.sh \
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/gdl-onboard.sh" \
   --scope=<project|global> \
   --gdl-root=<path> \
   --layers=<comma-separated> \

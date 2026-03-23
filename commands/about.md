@@ -17,7 +17,7 @@ Search across all 7 GDL layers for a topic. Returns formatted results grouped by
 Source the tools and call `gdl_about`:
 
 ```bash
-source scripts/gdl-tools.sh
+source "${CLAUDE_PLUGIN_ROOT}/scripts/gdl-tools.sh"
 gdl_about "$TOPIC" "${DIR:-.}" ${SUMMARY:+--summary} ${REGEX:+--regex} ${IGNORE_CASE:+--ignore-case} ${EXCLUDE_LAYER:+--exclude-layer=$EXCLUDE_LAYER}
 ```
 

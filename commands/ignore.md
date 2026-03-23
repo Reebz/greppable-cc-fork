@@ -26,14 +26,14 @@ If no `.gdlignore` exists, say so and suggest `/greppable:ignore detect`.
 ### `/greppable:ignore detect`
 Run prescan detection for UI frameworks and generated code:
 ```bash
-bash scripts/gdl-prescan.sh . --json
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/gdl-prescan.sh" . --json
 ```
 Parse `suggested_exclusions` from JSON output. For each suggestion, show the pattern and reason, then ask the user whether to add it. If the user confirms, write to `.gdlignore`.
 
 ## After Any Edit
 Run lint validation on the file:
 ```bash
-bash scripts/gdl-lint.sh .gdlignore
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/gdl-lint.sh" .gdlignore
 ```
 
 ## File Format Reference
