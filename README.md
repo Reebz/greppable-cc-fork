@@ -11,6 +11,8 @@ The grep-native language for agentic systems. Your AI agent gets structured know
 
 Restart Claude Code after installing.
 
+**Requires:** Node.js 16+ on PATH (for code indexing and session memory extraction).
+
 ## Setup (2 minutes)
 
 ### 1. Onboard your project

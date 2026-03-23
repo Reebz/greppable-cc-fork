@@ -15,7 +15,7 @@ Run the bash block below, then present the results as a **condensed summary tabl
 
 ```bash
 # Resolve plugin root with fallback (MUST be before any source calls)
-PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(ls -d ~/.claude/plugins/cache/greppable-marketplace/greppable/[0-9]* 2>/dev/null | sort -V | tail -1)}"
+PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(ls -d ~/.claude/plugins/cache/greppable-alpha/greppable/[0-9]* 2>/dev/null | sort -V | tail -1)}"
 if [[ -z "$PLUGIN_ROOT" || ! -d "$PLUGIN_ROOT" ]]; then
   echo "Error: Cannot resolve plugin root (CLAUDE_PLUGIN_ROOT=${CLAUDE_PLUGIN_ROOT:-unset}, cache lookup failed)." >&2
   echo "  Reinstall greppable: claude plugins install greppable" >&2
@@ -203,7 +203,7 @@ Wait for the user to pick an option before running anything below.
 Run this bash script and report the results to the user:
 
 ```bash
-PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(ls -d ~/.claude/plugins/cache/greppable-marketplace/greppable/[0-9]* 2>/dev/null | sort -V | tail -1)}"
+PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(ls -d ~/.claude/plugins/cache/greppable-alpha/greppable/[0-9]* 2>/dev/null | sort -V | tail -1)}"
 if [[ -z "$PLUGIN_ROOT" || ! -d "$PLUGIN_ROOT" ]]; then echo "Error: plugin root not found" >&2; exit 1; fi
 source "${PLUGIN_ROOT}/lib/session-context.sh"
 echo "### Hook Firing Test"
@@ -269,7 +269,7 @@ fi
 Run this bash script and report the results to the user. Note: requires `gh` CLI authenticated against the greppable repo (works once repo is public, or if user has private access).
 
 ```bash
-PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(ls -d ~/.claude/plugins/cache/greppable-marketplace/greppable/[0-9]* 2>/dev/null | sort -V | tail -1)}"
+PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(ls -d ~/.claude/plugins/cache/greppable-alpha/greppable/[0-9]* 2>/dev/null | sort -V | tail -1)}"
 if [[ -z "$PLUGIN_ROOT" || ! -d "$PLUGIN_ROOT" ]]; then echo "Error: plugin root not found" >&2; exit 1; fi
 echo "### Version Check"
 echo ""
@@ -311,7 +311,7 @@ fi
 Run this bash script and report the results to the user:
 
 ```bash
-PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(ls -d ~/.claude/plugins/cache/greppable-marketplace/greppable/[0-9]* 2>/dev/null | sort -V | tail -1)}"
+PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(ls -d ~/.claude/plugins/cache/greppable-alpha/greppable/[0-9]* 2>/dev/null | sort -V | tail -1)}"
 if [[ -z "$PLUGIN_ROOT" || ! -d "$PLUGIN_ROOT" ]]; then echo "Error: plugin root not found" >&2; exit 1; fi
 source "${PLUGIN_ROOT}/lib/session-context.sh"
 echo "### Memory Extraction Inspector"
@@ -398,7 +398,7 @@ fi
 Run this bash script and report the results to the user. Note: this can take a while on large projects as it scans source directories for each .gdlc module.
 
 ```bash
-PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(ls -d ~/.claude/plugins/cache/greppable-marketplace/greppable/[0-9]* 2>/dev/null | sort -V | tail -1)}"
+PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(ls -d ~/.claude/plugins/cache/greppable-alpha/greppable/[0-9]* 2>/dev/null | sort -V | tail -1)}"
 if [[ -z "$PLUGIN_ROOT" || ! -d "$PLUGIN_ROOT" ]]; then echo "Error: plugin root not found" >&2; exit 1; fi
 source "${PLUGIN_ROOT}/lib/session-context.sh"
 echo "### Stale Code Map Detection"
@@ -442,7 +442,7 @@ fi
 Run this bash script and report the results to the user. Note: validates every line of every GDL artifact file — can be slow on large projects.
 
 ```bash
-PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(ls -d ~/.claude/plugins/cache/greppable-marketplace/greppable/[0-9]* 2>/dev/null | sort -V | tail -1)}"
+PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(ls -d ~/.claude/plugins/cache/greppable-alpha/greppable/[0-9]* 2>/dev/null | sort -V | tail -1)}"
 if [[ -z "$PLUGIN_ROOT" || ! -d "$PLUGIN_ROOT" ]]; then echo "Error: plugin root not found" >&2; exit 1; fi
 source "${PLUGIN_ROOT}/lib/session-context.sh"
 echo "### GDL Validation (Lint Check)"
