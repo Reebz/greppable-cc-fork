@@ -31,17 +31,13 @@ lint_output=$(bash "$PLUGIN_ROOT/scripts/gdl-lint.sh" "$FILE" 2>&1) || true
 if [[ -n "$lint_output" ]]; then
     # Build full context string then escape for JSON
     ctx="GDL lint results for ${FILE##*/}:"$'\n'"${lint_output}"
-    ctx_escaped="${ctx//\\/\\\\}"
-    ctx_escaped="${ctx_escaped//\"/\\\"}"
-    ctx_escaped="${ctx_escaped//$'\n'/\\n}"
-    cat <<EOF
-{
-  "hookSpecificOutput": {
-    "hookEventName": "PostToolUse",
-    "additionalContext": "${ctx_escaped}"
-  }
-}
-EOF
+    # jq handles all control-char escaping
+    jq -n --arg ctx "$ctx" '{
+      hookSpecificOutput: {
+        hookEventName: "PostToolUse",
+        additionalContext: $ctx
+      }
+    }'
 else
     exit 0
 fi

@@ -47,16 +47,10 @@ rule_count=$(echo "$matching" | wc -l | tr -d ' ')
 # Build context with the matching rules
 ctx="[GDL Rules] ${rule_count} rule(s) apply to ${REL_PATH}:"$'\n'"${matching}"
 
-# Escape for JSON
-ctx_escaped="${ctx//\\/\\\\}"
-ctx_escaped="${ctx_escaped//\"/\\\"}"
-ctx_escaped="${ctx_escaped//$'\n'/\\n}"
-
-cat <<EOF
-{
-  "hookSpecificOutput": {
-    "hookEventName": "PreToolUse",
-    "additionalContext": "${ctx_escaped}"
+# Output hookSpecificOutput JSON (jq handles all control-char escaping)
+jq -n --arg ctx "$ctx" '{
+  hookSpecificOutput: {
+    hookEventName: "PreToolUse",
+    additionalContext: $ctx
   }
-}
-EOF
+}'

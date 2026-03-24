@@ -20,17 +20,10 @@ if [[ -z "$prompt" ]]; then
   exit 0
 fi
 
-# Escape for JSON
-json_prompt="${prompt//\\/\\\\}"
-json_prompt="${json_prompt//\"/\\\"}"
-json_prompt="${json_prompt//$'\n'/\\n}"
-
-# Output hookSpecificOutput JSON
-cat <<EOF
-{
-  "hookSpecificOutput": {
-    "hookEventName": "SessionStart",
-    "additionalContext": "${json_prompt}"
+# Output hookSpecificOutput JSON (jq handles all control-char escaping)
+jq -n --arg ctx "$prompt" '{
+  hookSpecificOutput: {
+    hookEventName: "SessionStart",
+    additionalContext: $ctx
   }
-}
-EOF
+}'

@@ -1,7 +1,7 @@
 {
   "name": "greppable",
   "description": "The grep-native language for agentic systems — more accurate, more efficient, at any scale",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "author": {
     "name": "Greppable",
     "url": "https://greppable.ai"
