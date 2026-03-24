@@ -5,10 +5,14 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "build": "esbuild index.js --bundle --platform=node --format=esm --outfile=dist/index.mjs --target=node18 && cp -r grammars dist/grammars && cp node_modules/web-tree-sitter/web-tree-sitter.wasm dist/",
     "extract": "node index.js",
     "test": "node --test test.js"
   },
   "dependencies": {
     "web-tree-sitter": "^0.26.6"
+  },
+  "devDependencies": {
+    "esbuild": "^0.27.3"
   }
 }

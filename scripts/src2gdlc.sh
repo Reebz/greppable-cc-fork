@@ -11,12 +11,17 @@ if ! command -v node &>/dev/null; then
     exit 1
 fi
 
-if [[ ! -d "$SRC2GDLC_DIR/node_modules" ]]; then
-    echo "Installing src2gdlc dependencies..." >&2
-    (cd "$SRC2GDLC_DIR" && npm install --silent) || {
-        echo "Error: npm install failed in $SRC2GDLC_DIR" >&2
-        exit 1
-    }
+# Prefer bundled dist (no npm install needed) over raw source
+if [[ -f "$SRC2GDLC_DIR/dist/index.mjs" ]]; then
+    node "$SRC2GDLC_DIR/dist/index.mjs" "$@"
+else
+    # Dev fallback: use raw source with node_modules
+    if [[ ! -d "$SRC2GDLC_DIR/node_modules" ]]; then
+        echo "Installing src2gdlc dependencies..." >&2
+        (cd "$SRC2GDLC_DIR" && npm install --silent) || {
+            echo "Error: npm install failed in $SRC2GDLC_DIR" >&2
+            exit 1
+        }
+    fi
+    node "$SRC2GDLC_DIR/index.js" "$@"
 fi
-
-node "$SRC2GDLC_DIR/index.js" "$@"
