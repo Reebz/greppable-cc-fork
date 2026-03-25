@@ -480,3 +480,33 @@ gdl_session_context() {
   echo "$prompt"
 }
 
+# Escape a string for JSON and wrap in hookSpecificOutput envelope.
+# Usage: gdl_json_hook_output <event_name> <context_string>
+# Outputs: JSON to stdout
+gdl_json_hook_output() {
+  local event="$1" ctx="$2"
+  # Escape in strict order: backslash first, then the rest
+  ctx="${ctx//\\/\\\\}"
+  ctx="${ctx//\"/\\\"}"
+  ctx="${ctx//$'\n'/\\n}"
+  ctx="${ctx//$'\t'/\\t}"
+  ctx="${ctx//$'\r'/\\r}"
+  printf '{"hookSpecificOutput":{"hookEventName":"%s","additionalContext":"%s"}}\n' "$event" "$ctx"
+}
+
+# Extract file_path from Claude Code hook stdin JSON.
+# Usage: gdl_extract_file_path <json_string>
+# Returns: file path string, or empty if not found
+# Note: grep exits 1 on no match. The || true prevents pipefail from
+# propagating a non-zero exit to callers running under set -euo pipefail.
+gdl_extract_file_path() {
+  local input="$1"
+  [[ -z "$input" ]] && return 0
+  local match
+  match=$(echo "$input" | grep -o '"file_path":"[^"]*"' 2>/dev/null | head -1) || true
+  [[ -z "$match" ]] && return 0
+  # Extract value, then unescape JSON backslash pairs (\\ -> \).
+  # Matches jq -r behavior for file paths. No-op on macOS/Linux (no backslashes in paths).
+  echo "$match" | sed 's/"file_path":"//;s/"$//' | sed 's/\\\\/\\/g'
+}
+

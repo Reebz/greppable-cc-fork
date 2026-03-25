@@ -20,10 +20,5 @@ if [[ -z "$prompt" ]]; then
   exit 0
 fi
 
-# Output hookSpecificOutput JSON (jq handles all control-char escaping)
-jq -n --arg ctx "$prompt" '{
-  hookSpecificOutput: {
-    hookEventName: "SessionStart",
-    additionalContext: $ctx
-  }
-}'
+# Output hookSpecificOutput JSON (bash escaping — no jq dependency)
+gdl_json_hook_output "SessionStart" "$prompt"

@@ -1,6 +1,6 @@
 ---
 name: managing-gdlignore
-description: Use when the user mentions excluding files or directories from scanning, ignoring UI components, or managing .gdlignore patterns
+description: Use when excluding files or directories from GDL scanning — generated code, node_modules, UI component libraries, or test fixtures that pollute code maps. Triggers on: 'ignore this directory', 'exclude from scanning', 'too much noise in GDL', '.gdlignore'. NOT for .gitignore management or general file filtering.
 ---
 
 When the user asks to exclude files/directories from GDL scanning, or mentions .gdlignore:

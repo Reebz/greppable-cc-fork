@@ -7,11 +7,14 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
+# Source shared helpers (provides gdl_extract_file_path, gdl_json_hook_output)
+source "$PLUGIN_ROOT/lib/session-context.sh"
+
 # Read hook input from stdin
 INPUT=$(cat)
 
-# Extract file path from tool_input (|| true guards against missing jq or malformed JSON)
-FILE=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty' 2>/dev/null) || true
+# Extract file path from tool_input
+FILE=$(gdl_extract_file_path "$INPUT")
 
 # No file path — skip (shouldn't happen for Edit/Write but be safe)
 [[ -z "$FILE" ]] && exit 0
@@ -29,15 +32,8 @@ esac
 lint_output=$(bash "$PLUGIN_ROOT/scripts/gdl-lint.sh" "$FILE" 2>&1) || true
 
 if [[ -n "$lint_output" ]]; then
-    # Build full context string then escape for JSON
     ctx="GDL lint results for ${FILE##*/}:"$'\n'"${lint_output}"
-    # jq handles all control-char escaping
-    jq -n --arg ctx "$ctx" '{
-      hookSpecificOutput: {
-        hookEventName: "PostToolUse",
-        additionalContext: $ctx
-      }
-    }'
+    gdl_json_hook_output "PostToolUse" "$ctx"
 else
     exit 0
 fi

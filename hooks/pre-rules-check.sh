@@ -7,11 +7,14 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
+# Source shared helpers (provides gdl_extract_file_path, gdl_json_hook_output, gdl_find_root)
+source "$PLUGIN_ROOT/lib/session-context.sh"
+
 # Read hook input from stdin
 INPUT=$(cat)
 
 # Extract file path from tool_input
-FILE=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty' 2>/dev/null) || true
+FILE=$(gdl_extract_file_path "$INPUT")
 
 # No file path — skip
 [[ -z "$FILE" ]] && exit 0
@@ -22,7 +25,6 @@ case "$FILE" in
 esac
 
 # Find project root (same resolution as session-start)
-source "$PLUGIN_ROOT/lib/session-context.sh"
 PROJECT_ROOT=$(gdl_find_root "$(dirname "$FILE" 2>/dev/null || echo ".")") || exit 0
 
 # Check for rules.gdl — exit silently if none
@@ -47,10 +49,5 @@ rule_count=$(echo "$matching" | wc -l | tr -d ' ')
 # Build context with the matching rules
 ctx="[GDL Rules] ${rule_count} rule(s) apply to ${REL_PATH}:"$'\n'"${matching}"
 
-# Output hookSpecificOutput JSON (jq handles all control-char escaping)
-jq -n --arg ctx "$ctx" '{
-  hookSpecificOutput: {
-    hookEventName: "PreToolUse",
-    additionalContext: $ctx
-  }
-}'
+# Output hookSpecificOutput JSON (bash escaping — no jq dependency)
+gdl_json_hook_output "PreToolUse" "$ctx"
