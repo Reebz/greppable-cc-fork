@@ -1,13 +1,13 @@
 {
   "name": "greppable",
   "description": "The grep-native language for agentic systems — more accurate, more efficient, at any scale",
-  "version": "0.9.5",
+  "version": "0.9.6",
   "author": {
     "name": "Greppable",
     "url": "https://greppable.ai"
   },
   "homepage": "https://greppable.ai",
-  "repository": "https://github.com/greppable/greppable-plugin-alpha",
+  "repository": "https://github.com/greppable/greppable-cc-plugin",
   "license": "MIT",
   "keywords": ["gdl", "grep", "agentic", "code-map", "schema", "diagrams", "memory"],
   "commands": ["./commands/"],

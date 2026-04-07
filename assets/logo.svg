@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 730 310" fill="none">
+  <!-- Terminal window background -->
+  <rect width="730" height="310" rx="10" fill="#0d1117"/>
+
+  <!-- Title bar -->
+  <rect width="730" height="36" rx="10" fill="#161b22"/>
+  <rect y="26" width="730" height="10" fill="#161b22"/>
+
+  <!-- Traffic lights -->
+  <circle cx="24" cy="18" r="6" fill="#ff5f57"/>
+  <circle cx="44" cy="18" r="6" fill="#febc2e"/>
+  <circle cx="64" cy="18" r="6" fill="#28c840"/>
+
+  <!-- Title -->
+  <text x="365" y="23" text-anchor="middle" font-family="'SF Mono','Menlo','Monaco','Consolas','Courier New',monospace" font-size="12" fill="#484f58">greppable</text>
+
+  <!-- Terminal content -->
+  <text font-family="'SF Mono','Menlo','Monaco','Consolas','Courier New',monospace" font-size="12.5" xml:space="preserve">
+    <!-- grep command -->
+    <tspan x="24" y="64" fill="#484f58">$</tspan>
+    <tspan fill="#8b949e"> grep -rn "</tspan>
+    <tspan fill="#4ade80">greppable</tspan>
+    <tspan fill="#8b949e">" /dev/universe</tspan>
+
+    <!-- ANSI Shadow block letters in green -->
+    <tspan x="24" y="100" fill="#4ade80"> ██████╗ ██████╗ ███████╗██████╗ ██████╗  █████╗ ██████╗ ██╗     ███████╗</tspan>
+    <tspan x="24" y="118" fill="#4ade80">██╔════╝ ██╔══██╗██╔════╝██╔══██╗██╔══██╗██╔══██╗██╔══██╗██║     ██╔════╝</tspan>
+    <tspan x="24" y="136" fill="#4ade80">██║  ███╗██████╔╝█████╗  ██████╔╝██████╔╝███████║██████╔╝██║     █████╗  </tspan>
+    <tspan x="24" y="154" fill="#3fb950">██║   ██║██╔══██╗██╔══╝  ██╔═══╝ ██╔═══╝ ██╔══██║██╔══██╗██║     ██╔══╝  </tspan>
+    <tspan x="24" y="172" fill="#3fb950">╚██████╔╝██║  ██║███████╗██║     ██║     ██║  ██║██████╔╝███████╗███████╗</tspan>
+    <tspan x="24" y="190" fill="#2ea043"> ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝     ╚═╝  ╚═╝╚═════╝ ╚══════╝╚══════╝</tspan>
+
+    <!-- .ai suffix -->
+    <tspan x="616" y="210" fill="#56d364" font-size="14" font-weight="bold">.ai</tspan>
+
+    <!-- Result line -->
+    <tspan x="24" y="250" fill="#484f58">1 match</tspan>
+    <tspan fill="#56d364"> · the grep-native language for agentic systems</tspan>
+
+    <!-- Version badge -->
+    <tspan x="24" y="278" fill="#30363d">v0.1 · research preview</tspan>
+  </text>
+</svg>

@@ -356,7 +356,7 @@ gdl_build_prompt() {
     fi
   fi
 
-  # Append memory pointer if memory is enabled (content accessed via skills, not injected)
+  # Append memory pointer and compaction nudge if memory is enabled
   if [[ "$memory" == "true" ]] && [[ -n "$gdl_root_abs" ]]; then
     local mem_dir="${gdl_root_abs}/memory/active"
     if [[ -d "$mem_dir" ]] && ls "$mem_dir"/*.gdlm >/dev/null 2>&1; then
@@ -365,15 +365,6 @@ gdl_build_prompt() {
       if (( mem_count > 0 )); then
         prompt="$prompt\n\nAgent memory: ${mem_count} records in memory/active/*.gdlm — consult before implementation decisions or when investigating past choices."
       fi
-    fi
-  fi
-
-  # Check memory record count for compaction nudge
-  if [[ "$memory" == "true" ]] && [[ -n "$gdl_root_abs" ]]; then
-    local mem_dir="${gdl_root_abs}/memory/active"
-    if [[ -d "$mem_dir" ]] && ls "$mem_dir"/*.gdlm >/dev/null 2>&1; then
-      local mem_count
-      mem_count=$(grep -h '^@memory' "$mem_dir"/*.gdlm 2>/dev/null | wc -l | tr -d ' ') || mem_count=0
       if (( mem_count > 200 )); then
         prompt="$prompt\n\n**Memory compaction recommended** — active memory has $mem_count records (threshold: 200). Run \`gdlm-compact.sh\` to archive aging records."
       fi

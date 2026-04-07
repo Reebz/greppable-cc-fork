@@ -293,7 +293,7 @@ if command -v gh &>/dev/null; then
       echo "To upgrade, run:"
       echo "  claude plugins update greppable"
       echo ""
-      echo "Release notes: https://github.com/greppable/greppable/releases/tag/v${LATEST}"
+      echo "Release notes: https://github.com/greppable/greppable-cc-plugin/releases/tag/v${LATEST}"
       echo ""
       echo "Note: Local patches (e.g. Windows fixes from greppable#76) will be overwritten."
     fi

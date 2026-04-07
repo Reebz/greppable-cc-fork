@@ -264,7 +264,7 @@ for active_file in "$ACTIVE_DIR"/*.gdlm; do
             [[ -z "$subj" ]] && continue
 
             # Get all records for this subject, take the latest (last line)
-            subj_records=$(echo "$regular_lines" | grep "subject:${subj}|" || echo "$regular_lines" | grep "subject:${subj}$" || true)
+            subj_records=$(echo "$regular_lines" | grep -F "subject:${subj}|" || echo "$regular_lines" | grep -F "subject:${subj}$" || true)
             subj_count=$(echo "$subj_records" | grep -c "^@memory" || echo "0")
             latest=$(echo "$subj_records" | grep "^@memory" | tail -1)
 
@@ -285,7 +285,7 @@ for active_file in "$ACTIVE_DIR"/*.gdlm; do
         while IFS= read -r subj; do
             [[ -z "$subj" ]] && continue
 
-            subj_records=$(echo "$decision_lines" | grep "subject:${subj}|" || echo "$decision_lines" | grep "subject:${subj}$" || true)
+            subj_records=$(echo "$decision_lines" | grep -F "subject:${subj}|" || echo "$decision_lines" | grep -F "subject:${subj}$" || true)
             subj_count=$(echo "$subj_records" | grep -c "^@memory" || echo "0")
             latest=$(echo "$subj_records" | grep "^@memory" | tail -1)
             ids=$(echo "$subj_records" | grep "^@memory" | grep -o 'id:[^|]*' | cut -d: -f2- | tr '\n' ',' | sed 's/,$//')

@@ -1,22 +1,22 @@
 {
-  "name": "greppable-alpha",
+  "name": "greppable-cc-plugin",
   "owner": {
     "name": "Greppable"
   },
   "metadata": {
     "description": "The grep-native language for agentic systems. Code maps, schema navigation, agent memory, architecture diagrams, and API contracts — all searchable with grep.",
-    "version": "0.9.5"
+    "version": "0.9.6"
   },
   "plugins": [
     {
       "name": "greppable",
       "source": "./",
       "description": "The grep-native language for agentic systems — more accurate, more efficient, at any scale",
-      "version": "0.9.5",
+      "version": "0.9.6",
       "author": {
         "name": "Greppable"
       },
-      "repository": "https://github.com/greppable/greppable-plugin-alpha",
+      "repository": "https://github.com/greppable/greppable-cc-plugin",
       "keywords": ["gdl", "grep", "agentic", "code-map", "schema", "diagrams", "memory"],
       "category": "productivity"
     }

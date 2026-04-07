@@ -682,6 +682,11 @@ lint_file() {
   format=$(get_format "$file")
   echo "Linting $file ($format)..."
 
+  if [[ ! -f "$file" ]]; then
+    err "$file: file not found"
+    return
+  fi
+
   case "$format" in
     gdl)  lint_gdl "$file" ;;
     gdls)

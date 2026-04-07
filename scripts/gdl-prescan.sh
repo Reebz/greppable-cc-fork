@@ -485,10 +485,7 @@ if [[ -d "$TARGET_DIR/.storybook" ]]; then
 fi
 
 # --- Output ---
-bridge_count=0
-if [[ ${#bridges[@]+x} ]]; then
-  bridge_count=${#bridges[@]}
-fi
+bridge_count=${#bridges[@]}
 
 if [[ "$JSON_MODE" = true ]]; then
   # JSON output
@@ -512,10 +509,7 @@ if [[ "$JSON_MODE" = true ]]; then
   done
   echo "  ],"
   echo "  \"suggested_exclusions\": ["
-  excl_count=0
-  if [[ ${#suggested_exclusions[@]+x} ]]; then
-    excl_count=${#suggested_exclusions[@]}
-  fi
+  excl_count=${#suggested_exclusions[@]}
   for ((i = 0; i < excl_count; i++)); do
     comma=""
     if [[ $i -lt $((excl_count - 1)) ]]; then
@@ -552,7 +546,7 @@ else
     echo ""
     echo "Total: $bridge_count bridge(s) detected"
   fi
-  if [[ ${#suggested_exclusions[@]+x} ]] && [[ ${#suggested_exclusions[@]} -gt 0 ]]; then
+  if [[ ${#suggested_exclusions[@]} -gt 0 ]]; then
     echo ""
     echo "Suggested Exclusions"
     echo "--------------------"

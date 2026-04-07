@@ -1158,15 +1158,18 @@ generate_context_sections() {
 # Escape label for Mermaid (wrap in quotes, handle special characters)
 escape_label() {
     local label="$1"
-    # Replace special characters that can break Mermaid rendering
-    # Order matters: & first to avoid double-escaping, then # before entities that contain #
-    label="${label//&/&amp;}"         # & -> &amp;
-    label="${label//\"/&quot;}"       # " -> &quot;
-    label="${label//$'\n'/ }"         # newlines -> space
-    label="${label//$'\r'/ }"         # carriage returns -> space
-    label="${label//#/&#35;}"         # # -> HTML entity
-    label="${label//|/&#124;}"        # | -> HTML entity (breaks edge label syntax; after # to avoid &#35; in entity)
-    label="${label//\`/&#96;}"        # backticks -> HTML entity
+    # Replace special characters that can break Mermaid rendering.
+    # Uses sed instead of bash parameter expansion because bash 5.2+
+    # treats & in replacement as the matched text (like sed), breaking
+    # HTML entity replacements on Ubuntu/CI while working on macOS bash 3.2.
+    # Order matters: & first to avoid double-escaping.
+    label=$(printf '%s' "$label" | sed \
+        -e 's/&/\&amp;/g' \
+        -e 's/"/\&quot;/g' \
+        -e 's/#/\&#35;/g' \
+        -e 's/|/\&#124;/g' \
+        -e 's/`/\&#96;/g' \
+        | tr '\n\r' '  ')
     echo "\"$label\""
 }
 
