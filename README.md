@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <strong>v0.1.0</strong> — research preview
+  <strong>v0.9.6</strong> — research preview
 </p>
 
 Greppable is a data language designed for how agents actually work — using native bash tools like `grep`. Seven grep-native file formats give your AI agents structured knowledge about your codebase, schemas, APIs, architecture, and decisions. The filesystem is the coordination layer, git is the audit trail, and `grep` is the query engine.
@@ -98,7 +98,7 @@ Searches all 7 GDL layers at once. Results grouped by layer with progressive dis
 
 All formats share: `@` prefix, `|` delimiter, one record per line — `grep` works across all seven layers.
 
-## How It Works
+## The Format
 
 Every GDL line is a self-contained, searchable record. No nesting, no closing brackets, no indentation ambiguity. A single `grep` command can query 10,000 tables with 100% accuracy.
 
