@@ -8,6 +8,26 @@
 
 Greppable is a data language designed for how agents actually work — using native bash tools like `grep`. Seven grep-native file formats give your AI agents structured knowledge about your codebase, schemas, APIs, architecture, and decisions. The filesystem is the coordination layer, git is the audit trail, and `grep` is the query engine.
 
+## Benchmarks
+
+Tested on [n8n](https://github.com/n8n-io/n8n) v2.8.3, a production monorepo with enough complexity to exercise all three GDL formats. 16 GDL files (19,025 lines) installed alongside existing source code. 40 questions across 4 tiers, judged by Claude Sonnet 4.5.
+
+| Metric | With GDL | Source Only | Delta |
+|--------|----------|-------------|-------|
+| **Overall Accuracy** | **87.4%** | 76.9% | **+10.5pp** |
+| Avg Turns | 8.1 | 14.2 | 43% fewer |
+| Avg Cost/Question | $0.064 | $0.105 | 39% cheaper |
+| Avg Duration | 32.5s | 46.6s | 30% faster |
+
+**Per-layer impact:**
+- **GDLC** (Code Maps) — 59% fewer turns, +6.0pp accuracy
+- **GDLD** (Diagrams) — 55% fewer turns, +18.7pp accuracy
+- **GDLS** (Schema) — 39% fewer turns, +3.5pp accuracy
+
+**Key findings:** Diagram questions benefit most (+18.7pp) — the control must trace execution paths through source code. Cross-format questions show strong synergy (+14.0pp) from targeted grep across structured formats. GDL doesn't trade accuracy for efficiency — it improves both.
+
+> Full methodology and per-tier breakdowns at [greppable.ai/benchmarks](https://greppable.ai/benchmarks)
+
 ## Quick Install
 
 ```bash
