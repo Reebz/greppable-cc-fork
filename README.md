@@ -1,3 +1,5 @@
+FORK CONTEXT: Modifications to work alongside [Serena](https://github.com/oraios/serena) and [MemPalace](https://github.com/MemPalace/mempalace). Strip Greppable to schema/API/diagram/doc layers only, removing GDLC and GDLM to avoid overlap with Serena (code intelligence) and MemPalace (memory). 
+
 <p align="center">
   <img src="assets/logo.svg" alt="greppable" width="680">
 </p>
