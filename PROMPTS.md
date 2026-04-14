@@ -1,4 +1,4 @@
-# Agent Prompts for GDLS, GDL, Memory, and Diagrams
+# Agent Prompts for GDLS, GDL, and Diagrams
 
 Minimal prompts that achieve maximum tool efficiency. Based on the proven GDLS v1 MINIMAL approach (100% accuracy, 1.0 tool calls at 10,000 tables).
 
@@ -95,42 +95,6 @@ Each GDL line is complete. No `-A` context lines needed. One grep, direct answer
 
 ---
 
-## Memory Prompt (Agent Knowledge)
-
-**Use when:** Agent needs to read or write shared memory (observations, decisions, past knowledge).
-
-```
-Agent memory specialist. Memory: {memory_path}/active/*.gdlm, Anchors: {memory_path}/anchors.gdlm
-
-Format: @memory|key:value|key:value - each line is a complete record. Latest timestamp wins.
-
-Grep "subject:TOPIC" or "anchor:CONCEPT" for knowledge. Grep anchors.gdlm first for concept search.
-```
-
-**Token count:** ~44 tokens
-
-### Why it works
-
-- Line 1: Points to both active memory and the anchor file
-- Line 2: Format plus the critical resolution rule (latest timestamp wins)
-- Line 3: Two retrieval strategies - direct subject grep and concept anchor two-step
-
-### With archive fallback
-
-When the agent should also check compacted historical knowledge:
-
-```
-Agent memory specialist. Active: {memory_path}/active/*.gdlm, Archive: {memory_path}/archive/*.gdlm, Anchors: {memory_path}/anchors.gdlm
-
-Format: @memory|key:value|key:value - each line complete. Latest timestamp wins.
-
-Grep active first. If insufficient, grep archive. For concept search, grep anchors.gdlm then grep "anchor:CONCEPT".
-```
-
-**Token count:** ~52 tokens
-
----
-
 ## Diagram Prompt (Visual Knowledge)
 
 **Use when:** Agent needs to understand architecture flows, patterns, components, gotchas, and entry points.
@@ -197,28 +161,6 @@ Grep "^@participant" for actors. Grep "^@msg" for ordered messages. Grep "@msg|f
 
 ---
 
-## GDLC Prompt (Code Navigation)
-
-**Use when:** Agent needs to understand code structure (files, directories, exports, imports).
-
-```
-Code index expert. Files: {code_path}/project.gdlc
-
-Format: @D directory|desc and @F path|lang:LANG|exports:a,b|imports:x,y|desc - one record per line.
-
-Grep "@D dir" for directories. Grep "@F.*lang:LANG" for files by language. Grep "@F.*exports:.*name" for exports. Grep "@F.*imports:.*module" for import graph.
-```
-
-**Token count:** ~48 tokens
-
-### Why it works
-
-- Line 1: Tells the agent what it is and where the single project file lives
-- Line 2: Explains both record types and their fields — self-contained, no context lines needed
-- Line 3: Four grep strategies covering directory lookup, language filtering, export search, and import graph traversal
-
----
-
 ## GDLU Prompt (Document Navigation)
 
 **Use when:** Agent needs to find, navigate, or query unstructured content (PDFs, transcripts, slides, design files, etc.)
@@ -282,53 +224,49 @@ Data: {data_path}/*.gdl - grep "key:value" for records, one per line.
 
 ---
 
-## Combined Prompt (Schema + Data + Memory)
+## Combined Prompt (Schema + Data)
 
-**Use when:** Agent needs the full picture - system structure, business data, and shared knowledge.
+**Use when:** Agent needs the full picture - system structure and business data.
 
 ```
-Database, data, and memory expert.
+Database and data expert.
 Schema: {schema_path}/[domain]/schema.gdls - grep "@T TABLE" -A 30. PK: |PK|, FK: |FK|
 Data: {data_path}/*.gdl - grep "key:value" for records, one per line.
-Memory: {memory_path}/active/*.gdlm - grep "subject:TOPIC" or "anchor:CONCEPT". Latest ts wins.
 ```
 
-**Token count:** ~62 tokens
+**Token count:** ~48 tokens
 
 ---
 
-## Combined Prompt (Schema + Data + Memory + Diagrams)
+## Combined Prompt (Schema + Data + Diagrams)
 
-**Use when:** Agent needs system structure, business data, shared knowledge, and architectural context.
+**Use when:** Agent needs system structure, business data, and architectural context.
 
 ```
 Full-stack knowledge expert.
 Schema: {schema_path}/[domain]/schema.gdls - grep "@T TABLE" -A 30. PK: |PK|, FK: |FK|
 Data: {data_path}/*.gdl - grep "key:value" for records.
-Memory: {memory_path}/active/*.gdlm - grep "subject:TOPIC" or "anchor:CONCEPT". Latest ts wins.
 Diagrams: {diagram_path}/*.gdld - grep "^@type" for records. @node, @edge, @use-when, @use-not, @pattern, @participant, @msg, @gotcha, @component, @entry.
 ```
 
-**Token count:** ~78 tokens
+**Token count:** ~68 tokens
 
 ---
 
-## Combined Prompt (All 7 Layers)
+## Combined Prompt (All 5 Layers)
 
-**Use when:** Agent needs the complete GDL knowledge stack including API contracts and unstructured document context.
+**Use when:** Agent needs the complete GDL knowledge stack - schema, API contracts, data, diagrams, and unstructured documents.
 
 ```
 Full-stack knowledge expert.
 Schema: {schema_path}/[domain]/schema.gdls - grep "@T TABLE" -A 30. PK: |PK|, FK: |FK|
-Code: {code_path}/project.gdlc - grep "@D dir" for dirs. "@F.*exports:.*name" for exports. "@F.*imports:.*module" for imports.
 API: {api_path}/*.gdla - grep "@EP METHOD" for endpoints. "@S Schema" -A 20 for fields. "@AUTH" for security.
 Data: {data_path}/*.gdl - grep "key:value" for records.
-Memory: {memory_path}/active/*.gdlm - grep "subject:TOPIC" or "anchor:CONCEPT". Latest ts wins.
 Diagrams: {diagram_path}/*.gdld - grep "^@type" for records. @node, @edge, @gotcha, @component, @entry.
 Documents: {docs_path}/**/*.gdlu - grep "^@source.*type:TYPE" for docs. "^@extract.*kind:KIND" for facts.
 ```
 
-**Token count:** ~125 tokens
+**Token count:** ~95 tokens
 
 ---
 
@@ -337,7 +275,7 @@ Documents: {docs_path}/**/*.gdlu - grep "^@source.*type:TYPE" for docs. "^@extra
 1. **3 lines maximum** - proven optimal. More guidance wastes tokens. Less causes format exploration (2-4x more tool calls).
 2. **State the tool strategy** - "grep with after_context=30" or "grep key:value" tells the agent exactly how to search.
 3. **Name the key markers** - "|PK|" for GDLS, "key:value" for GDL. The agent knows what to look for in output.
-4. **Path templates use placeholders** - Replace `{schema_path}`, `{data_path}`, `{memory_path}` with actual paths.
+4. **Path templates use placeholders** - Replace `{schema_path}`, `{data_path}`, `{diagram_path}`, etc. with actual paths.
 
 ---
 
@@ -402,6 +340,5 @@ bash scripts/gdl-diff.sh old.gdl new.gdl       # Compare two files
 
 ```bash
 source scripts/gdl-tools.sh
-gdl_new memory --agent=sf-042 --subject=GL_ACCOUNT --detail="New column" --file=memory/active/systems.gdlm --append
 gdl_new source --path=doc.pdf --format=pdf --type=contract --summary="Acme MSA" --file=data.gdlu --append
 ```

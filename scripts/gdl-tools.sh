@@ -130,9 +130,9 @@ gdl_about() {
         case "$arg" in
             --layer=*)
                 layer_filter="${arg#--layer=}"
-                if [[ ! "$layer_filter" =~ ^(gdls|gdlc|gdld|gdlm|gdl|gdlu|gdla)$ ]]; then
+                if [[ ! "$layer_filter" =~ ^(gdls|gdld|gdl|gdlu|gdla)$ ]]; then
                     echo "Usage: gdl_about <topic> [base_dir] [--layer=LAYER] [--exclude-layer=LAYERS] [--summary] [--regex] [--ignore-case]" >&2
-                    echo "Error: Invalid layer '$layer_filter'. Must be one of: gdl, gdls, gdlc, gdld, gdlm, gdlu, gdla" >&2
+                    echo "Error: Invalid layer '$layer_filter'. Must be one of: gdl, gdls, gdld, gdlu, gdla" >&2
                     return 1
                 fi
                 ;;
@@ -146,9 +146,9 @@ gdl_about() {
                 IFS=','
                 for elyr in $excl; do
                     [[ -z "$elyr" ]] && continue  # Skip empty elements from trailing/double commas
-                    if [[ ! "$elyr" =~ ^(gdls|gdlc|gdld|gdlm|gdl|gdlu|gdla)$ ]]; then
+                    if [[ ! "$elyr" =~ ^(gdls|gdld|gdl|gdlu|gdla)$ ]]; then
                         echo "Usage: gdl_about <topic> [base_dir] [--layer=LAYER] [--exclude-layer=LAYERS] [--summary] [--regex] [--ignore-case]" >&2
-                        echo "Error: Invalid exclude layer '$elyr'. Must be one of: gdl, gdls, gdlc, gdld, gdlm, gdlu, gdla" >&2
+                        echo "Error: Invalid exclude layer '$elyr'. Must be one of: gdl, gdls, gdld, gdlu, gdla" >&2
                         IFS="$IFS_OLD"
                         return 1
                     fi
@@ -188,7 +188,7 @@ gdl_about() {
     local found_any=false
 
     # Search each layer
-    local layers=("gdls" "gdla" "gdlc" "gdld" "gdlm" "gdl" "gdlu")
+    local layers=("gdls" "gdla" "gdld" "gdl" "gdlu")
     for lyr in "${layers[@]}"; do
         # Skip if layer filter is set and doesn't match
         if [[ -n "$layer_filter" && "$layer_filter" != "$lyr" ]]; then
@@ -493,11 +493,11 @@ gdl_ignore_patterns() {
     line="${line%"${line##*[![:space:]]}"}"
     [[ -z "$line" ]] && continue
 
-    # Check for format prefix (e.g. gdlc:pattern)
+    # Check for format prefix (e.g. gdlu:pattern)
     if [[ "$line" == *:* ]] && [[ "$line" =~ ^(gdl[a-z]*): ]]; then
       local prefix="${BASH_REMATCH[1]}"
       local pattern="${line#"$prefix":}"
-      # Strip leading whitespace from pattern (handles "gdlc: pattern/" with space)
+      # Strip leading whitespace from pattern (handles "gdlu: pattern/" with space)
       pattern="${pattern#"${pattern%%[![:space:]]*}"}"
       if [[ -n "$pattern" ]] && [[ "$prefix" == "$format" ]]; then
         echo "$pattern"

@@ -17,7 +17,7 @@ GDLA provides agents with a complete structural map of an API contract. This inc
 
 An agent reading GDLA can understand the full surface area of an API without parsing OpenAPI YAML, GraphQL SDL, or Swagger JSON.
 
-GDLA is not for database schemas (that's GDLS), not for code structure (that's GDLC), not for runtime behaviour or API call logs.
+GDLA is not for database schemas (that's GDLS), not for runtime behaviour or API call logs.
 
 ---
 
@@ -36,7 +36,7 @@ GDLA is not for database schemas (that's GDLS), not for code structure (that's G
 
 ### Where GDLA adds little value
 
-- **Internal function calls** — use GDLC for code-level call graphs.
+- **Internal function calls** — GDLA captures contract structure, not code-level call graphs.
 - **Runtime API monitoring** — GDLA captures contract structure, not runtime behaviour.
 
 ### Known v0.1 limitations
@@ -50,7 +50,7 @@ GDLA is not for database schemas (that's GDLS), not for code structure (that's G
 
 ## Format
 
-GDLA records use positional pipe-delimited fields (like GDLC and GDLS):
+GDLA records use positional pipe-delimited fields (like GDLS):
 
 ```
 @D service-name|description|version|base-url
@@ -119,7 +119,7 @@ Declares an API service. One `@D` per service per file.
 | 3 | Version | No | API version (e.g., `3.0.1`, `v2`) |
 | 4 | Base URL | No | Base URL or server path |
 
-**Note:** GDLA `@D` has 4 fields, unlike GDLC/GDLS `@D` which has 2 fields. The file extension disambiguates.
+**Note:** GDLA `@D` has 4 fields, unlike GDLS `@D` which has 2 fields. The file extension disambiguates.
 
 #### Examples
 
@@ -145,7 +145,7 @@ Declares a data schema (request body, response type, component). Followed by ind
 
 ### Schema Fields (indented)
 
-Indented lines (leading space) below an `@S` record are schema fields belonging to that schema. This mirrors GDLC's file-under-`@D` pattern.
+Indented lines (leading space) below an `@S` record are schema fields belonging to that schema.
 
 ```
  field|type|required|format|description
@@ -476,10 +476,6 @@ grep "^@EP.*|bearer$" *.gdla
 # API endpoint for a database table
 grep "^@S User|" api/*.gdla
 grep "^@T USER_ACCOUNT " schemas/*.gdls
-
-# What code implements this endpoint?
-grep "^@EP POST /users" api/*.gdla
-grep "^@F.*UserController" project.gdlc
 ```
 
 ---
@@ -491,7 +487,7 @@ grep "^@F.*UserController" project.gdlc
 3. **Context-complete** — `grep -A 20 "^@EP GET /pets"` returns the endpoint plus its parameters in one call.
 4. **Method-aware** — HTTP verbs and GraphQL operations share the same `@EP` record, unifying REST and GraphQL queries.
 5. **Bash-native** — Works with grep, cut, awk directly, no parsers needed.
-6. **Family-parallel** — Shares `@R`, `@PATH`, `@ENUM` with GDLC/GDLS for agents that already know those formats.
+6. **Family-parallel** — Shares `@R`, `@PATH`, `@ENUM` with GDLS for agents that already know that format.
 
 ---
 
@@ -503,17 +499,15 @@ GDLA and its siblings are formats in the same language family:
 |--------|-----------|---------|-------------|
 | GDLS | `.gdls` | Schema maps (tables, relationships) | Positional (`@D`, `@T`, `@R`, `@PATH`, `@E`) |
 | GDL | `.gdl` | Structured data records | Key-value (`@type\|key:value`) |
-| GDLC | `.gdlc` | File-level code index | Positional (`@D`, `@F`) |
 | GDLD | `.gdld` | Visual knowledge (diagrams) | Key-value (`@diagram`, `@node`, `@edge`) |
-| GDLM | `.gdlm` | Agent knowledge (three-tier) | Key-value (`@memory`, `@anchor`) |
 | GDLU | `.gdlu` | Unstructured content index | Key-value (`@source`, `@section`, `@extract`) |
 | **GDLA** | **`.gdla`** | **API contract maps** | **Positional (`@D`, `@S`, `@EP`, `@P`, `@R`)** |
 
-GDLS tells agents what databases look like. GDLC tells agents what code looks like. **GDLA tells agents what APIs look like.** The three positional formats share `@R` for relationships and `@PATH` for traversal, enabling cross-layer queries.
+GDLS tells agents what databases look like. **GDLA tells agents what APIs look like.** The two positional formats share `@R` for relationships and `@PATH` for traversal, enabling cross-layer queries.
 
-**Key differences from GDLC/GDLS:**
-- `@D` has 4 fields (service + description + version + base-url) vs 2 fields in GDLC/GDLS
-- `@S` is unique to GDLA for schema definitions (distinct from GDLS tables and GDLC directories)
+**Key differences from GDLS:**
+- `@D` has 4 fields (service + description + version + base-url) vs 2 fields in GDLS
+- `@S` is unique to GDLA for schema definitions (distinct from GDLS tables)
 - `@EP` is unique to GDLA (endpoints with HTTP/GraphQL methods)
 - `@P` is unique to GDLA (API parameters bound to endpoints)
 - `@AUTH` is unique to GDLA (authentication schemes)
@@ -536,7 +530,7 @@ Bridge output includes `# @VERSION` headers with `source:openapi-bridge` or `sou
 Agents can enrich bridge-generated GDLA with:
 - Better descriptions on `@EP` and `@S` records
 - `@PATH` records for key API navigation flows
-- Cross-layer `@R` references linking to GDLS or GDLC entities
+- Cross-layer `@R` references linking to GDLS entities
 
 ---
 

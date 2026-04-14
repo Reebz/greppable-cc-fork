@@ -10,7 +10,7 @@ The Diagram layer captures visual knowledge that agents and humans use to unders
 - **Self-describing** - Every record carries its field names
 - **Prose-preserving** - Structured records for components, gotchas, and conditions alongside the graph
 
-Diagrams are not for deterministic business data (that's GDL) or agent memory (that's Memory). Diagrams encode architectural knowledge, patterns, and visual structures.
+Diagrams are not for deterministic business data (that's GDL). Diagrams encode architectural knowledge, patterns, and visual structures.
 
 ## Optimal Agent Prompts
 
@@ -845,13 +845,11 @@ grep "status:planned" file.gdld
 |-------|--------|---------|-----------|
 | Schema | GDLS | External system structure | `.gdls` |
 | Data | GDL | Business records | `.gdl` |
-| Memory | GDL + memory vocab | Agent knowledge | `.gdlm` |
 | **Diagram** | **GDL + diagram vocab** | **Visual knowledge** | **`.gdld`** |
-| Code | GDLC | File-level code index | `.gdlc` |
 | API | GDLA | API contract maps | `.gdla` |
 | Documents | GDLU | Unstructured content index | `.gdlu` |
 
-All seven layers capture knowledge in the same grep-native style. GDLC provides code structure that can be visualized as diagrams via `gdlc2gdld.sh`. GDLA maps API contracts (endpoints, schemas, auth) via `gdla2gdld.sh`. GDLU indexes unstructured content (PDFs, transcripts, media) via `gdlu2gdld.sh`.
+All five layers capture knowledge in the same grep-native style. GDLA maps API contracts (endpoints, schemas, auth) via `gdla2gdld.sh`. GDLU indexes unstructured content (PDFs, transcripts, media) via `gdlu2gdld.sh`.
 
 ---
 

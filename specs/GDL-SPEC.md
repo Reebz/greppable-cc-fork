@@ -6,8 +6,6 @@
 
 GDL is a deterministic data store for structured business records that agents query directly via grep, without needing an external database connection. Customer lists, order records, product catalogs, configuration data - anything an agent needs to look up by field value.
 
-GDL is not for agent memory. See specs/GDLM-SPEC.md for the agent memory layer.
-
 ## Format
 
 ```
@@ -189,7 +187,7 @@ Every GDL artifact file SHOULD include a version header comment:
 ```
 
 Fields:
-- `spec` — format type (gdl, gdls, gdlc, gdld, gdlm, gdlu)
+- `spec` — format type (gdl, gdls, gdld, gdlu)
 - `v` — spec version the file was generated against
 - `generated` — date of generation (ISO 8601)
 - `source` — generation method: `llm-inferred`, `ast-parsed`, `deterministic`, `manual`
@@ -216,7 +214,7 @@ GDL artifacts span a spectrum from fully deterministic to LLM-approximate. The `
 1. **Skeleton** (`source:tree-sitter`) — deterministic structure extracted from AST. Safe to regenerate. Contains `source-hash:` for staleness detection.
 2. **Enrichment overlay** (`source:agent`) — semantic descriptions, flow annotations, and curated relationships. Preserved across regenerations.
 
-This confines the approximate surface area to descriptions and semantic annotations, while structural data (names, types, visibility, imports) remains exact. See GDLC-SPEC for the full skeleton/enrichment specification.
+This confines the approximate surface area to descriptions and semantic annotations, while structural data (names, types, visibility, imports) remains exact.
 
 **Consumer guidance:**
 - Artifacts with `source:ast-parsed` or `source:tree-sitter` can be trusted for structural queries (member lookup, dependency tracing, import graphs).
@@ -263,14 +261,14 @@ Grep "key:value" to find records. Grep "^@type" to filter by type.
 
 ---
 
-## Relationship to GDLS and Memory
+## Relationship to Other GDL Layers
 
-GDLS, GDL, Memory, Diagram, and Code are sibling formats in the same language family:
+GDLS, GDL, Diagram, and Documents are sibling formats in the same language family:
 
-| | GDLS | GDL | Memory | Diagram | Code | Documents |
-|--|------|-----|--------|---------|------|-----------|
-| Purpose | Schema and relationships | Deterministic data records | Agent knowledge and state | Visual knowledge | File-level code index | Unstructured content index |
-| Fields | Positional | Key:value | Key:value + memory-specific | Key:value + diagram vocab | Positional (5-field files) | Key:value (`@source`, `@section`, `@extract`) |
-| Extension | `.gdls` | `.gdl` | `.gdlm` | `.gdld` | `.gdlc` | `.gdlu` |
-| Content | Structure of systems | Facts about entities | Observations, decisions, context | Architecture flows, patterns | Files, exports, imports | PDFs, transcripts, media indexes |
+| | GDLS | GDL | Diagram | Documents |
+|--|------|-----|---------|-----------|
+| Purpose | Schema and relationships | Deterministic data records | Visual knowledge | Unstructured content index |
+| Fields | Positional | Key:value | Key:value + diagram vocab | Key:value (`@source`, `@section`, `@extract`) |
+| Extension | `.gdls` | `.gdl` | `.gdld` | `.gdlu` |
+| Content | Structure of systems | Facts about entities | Architecture flows, patterns | PDFs, transcripts, media indexes |
 | Shared | `@` prefix, `\|` delimiter, line-oriented, grep-first |

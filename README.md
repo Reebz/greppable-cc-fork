@@ -1,3 +1,5 @@
+> **FORK CONTEXT:** Modifications to work alongside [Serena](https://github.com/oraios/serena) and [MemPalace](https://github.com/MemPalace/mempalace). Strip Greppable to schema/API/diagram/doc layers only, removing GDLC and GDLM to avoid overlap with Serena (code intelligence) and MemPalace (memory).
+
 <p align="center">
   <img src="assets/logo.svg" alt="greppable" width="680">
 </p>
@@ -6,11 +8,11 @@
   <strong>v0.9.6</strong> — research preview
 </p>
 
-Greppable is a data language designed for how agents actually work — using native bash tools like `grep`. Seven grep-native file formats give your AI agents structured knowledge about your codebase, schemas, APIs, architecture, and decisions. The filesystem is the coordination layer, git is the audit trail, and `grep` is the query engine.
+Greppable is a data language designed for how agents actually work — using native bash tools like `grep`. Five grep-native file formats give your AI agents structured knowledge about your schemas, APIs, architecture, and decisions. The filesystem is the coordination layer, git is the audit trail, and `grep` is the query engine.
 
 ## Benchmarks
 
-Tested on [n8n](https://github.com/n8n-io/n8n) v2.8.3, a production monorepo with enough complexity to exercise all three GDL formats. 16 GDL files (19,025 lines) installed alongside existing source code. 40 questions across 4 tiers, judged by Claude Sonnet 4.5.
+Tested on [n8n](https://github.com/n8n-io/n8n) v2.8.3, a production monorepo with enough complexity to exercise multiple GDL formats. 16 GDL files (19,025 lines) installed alongside existing source code. 40 questions across 4 tiers, judged by Claude Sonnet 4.5.
 
 | Metric | With GDL | Source Only | Delta |
 |--------|----------|-------------|-------|
@@ -20,7 +22,6 @@ Tested on [n8n](https://github.com/n8n-io/n8n) v2.8.3, a production monorepo wit
 | Avg Duration | 32.5s | 46.6s | 30% faster |
 
 **Per-layer impact:**
-- **GDLC** (Code Maps) — 59% fewer turns, +6.0pp accuracy
 - **GDLD** (Diagrams) — 55% fewer turns, +18.7pp accuracy
 - **GDLS** (Schema) — 39% fewer turns, +3.5pp accuracy
 
@@ -68,7 +69,6 @@ This sets up greppable for your project:
 ```
 
 Scans your project and generates GDL artifacts:
-- **Code index** (`.gdlc`) — file paths, exports, imports, language metadata
 - **Architecture diagrams** (`.gdld`) — system flows and visual knowledge
 - **Schema maps** (`.gdls`) — database tables, columns, relationships (if SQL/Prisma detected)
 - **API contracts** (`.gdla`) — endpoints, schemas, auth (if OpenAPI/GraphQL detected)
@@ -89,7 +89,7 @@ Shows your GDL health: mode, active layers, artifact counts, and any stale files
 /greppable:about payment --summary
 ```
 
-Searches all 7 GDL layers at once. Results grouped by layer with progressive disclosure.
+Searches all GDL layers at once. Results grouped by layer with progressive disclosure.
 
 ## Skills
 
@@ -97,26 +97,23 @@ Searches all 7 GDL layers at once. Results grouped by layer with progressive dis
 |---------|-------------|
 | `/greppable:onboard` | Set up GDL config, static reference, and directory structure |
 | `/greppable:discover` | Full codebase scan — generates code maps, diagrams, schemas |
-| `/greppable:about` | Cross-layer search across all 7 GDL formats |
+| `/greppable:about` | Cross-layer search across all GDL formats |
 | `/greppable:diagram` | Create architecture diagrams from conversation context |
 | `/greppable:status` | Health check — inventory, stale detection, lint status |
 | `/greppable:pr-summary` | PR summaries with change-flow diagrams |
-| `/greppable:memory` | Toggle automatic session memory extraction |
 | `/greppable:ignore` | Manage .gdlignore exclusion patterns |
 
-## The Seven Layers
+## Layers
 
 | Layer | Extension | Purpose |
 |-------|-----------|---------|
 | **GDLS** (Schema) | `.gdls` | Structural maps of external systems (tables, columns, PKs) |
 | **GDL** (Data) | `.gdl` | Structured business data as `@type\|key:value` records |
-| **GDLC** (Code) | `.gdlc` | File-level code index (paths, exports, imports) |
 | **GDLA** (API) | `.gdla` | API contract maps (endpoints, schemas, auth) |
-| **GDLM** (Memory) | `.gdlm` | Shared agent knowledge with three-tier lifecycle |
 | **GDLD** (Diagram) | `.gdld` | Visual knowledge — flows, patterns, sequences, gotchas |
 | **GDLU** (Unstructured) | `.gdlu` | Document indexes for PDFs, transcripts, media |
 
-All formats share: `@` prefix, `|` delimiter, one record per line — `grep` works across all seven layers.
+All formats share: `@` prefix, `|` delimiter, one record per line — `grep` works across all layers.
 
 ## The Format
 
@@ -136,11 +133,8 @@ Every GDL line is a self-contained, searchable record. No nesting, no closing br
 ## How It Works
 
 Greppable uses hooks and skills to integrate automatically:
-- **SessionStart** — injects artifact inventory and context into every session
-- **PreToolUse** — checks `rules.gdl` and injects matching rules before file edits
 - **PostToolUse** — validates GDL files with `gdl-lint.sh` after changes
 - **Skills** — trigger based on what you're doing (exploring code, investigating decisions, mapping architecture)
-- **Background memory** — extracts decisions and observations from sessions automatically
 
 ## Bash Tooling
 
@@ -151,13 +145,6 @@ Every format has matching bash tools for direct use:
 source scripts/gdl-tools.sh
 gdl_about "authentication" .
 
-# Code index
-source scripts/gdlc-tools.sh
-gdlc_exports parseGdls project.gdlc
-
-# Visualization pipeline: any format → GDLD → Mermaid
-bash scripts/gdlc2gdld.sh code.gdlc > /tmp/out.gdld && bash scripts/gdld2mermaid.sh /tmp/out.gdld
-
 # Linting
 bash scripts/gdl-lint.sh --all docs/gdl --strict
 ```
@@ -167,7 +154,7 @@ bash scripts/gdl-lint.sh --all docs/gdl --strict
 | Document | Description |
 |----------|-------------|
 | [ARCHITECTURE.md](ARCHITECTURE.md) | Core architecture, concurrency model, agent coordination |
-| [specs/](specs/) | Format specifications for all 7 layers |
+| [specs/](specs/) | Format specifications for all layers |
 | [PROMPTS.md](PROMPTS.md) | Optimized minimal agent prompts per layer |
 
 ## License

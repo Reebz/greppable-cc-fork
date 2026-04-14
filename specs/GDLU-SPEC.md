@@ -4,7 +4,7 @@
 
 ## Purpose
 
-GDLU is a grep-queryable **index** of unstructured content. It follows the same pattern as GDLC for code — GDLC doesn't contain code, it contains a structural map of code. GDLU doesn't contain documents, it contains a structural map of documents.
+GDLU is a grep-queryable **index** of unstructured content. It doesn't contain documents, it contains a structural map of documents.
 
 An agent working with unstructured content needs to:
 1. **Find** relevant documents for a query (without reading them all)
@@ -12,7 +12,7 @@ An agent working with unstructured content needs to:
 3. **Extract** key facts without full-document parsing
 4. **Connect** unstructured content to other GDL layers (schemas, memory, data)
 
-GDLU is not for structured business data (that's GDL), not for code structure (that's GDLC), not for agent memory (that's Memory), not for visual knowledge (that's GDLD).
+GDLU is not for structured business data (that's GDL), not for visual knowledge (that's GDLD).
 
 ---
 
@@ -346,11 +346,9 @@ The `refs:` field supports cross-layer and intra-layer references using the patt
 | `gdlu:` | Other GDLU sources | `refs:gdlu:U-001` (amendment references original contract) |
 | `gdls:` | GDLS schema tables | `refs:gdls:GL_ACCOUNT` |
 | `gdl:` | GDL data records | `refs:gdl:C001` |
-| `gdlc:` | GDLC file index | `refs:gdlc:src/auth/service.ts` |
 | `gdld:` | GDLD diagram IDs | `refs:gdld:platform-architecture` |
-| `gdlm:` | Memory record IDs | `refs:gdlm:M-042-018` |
 
-Multiple refs are comma-separated: `refs:gdlu:U-001,gdls:GL_ACCOUNT,gdlc:src/auth/service.ts`
+Multiple refs are comma-separated: `refs:gdlu:U-001,gdls:GL_ACCOUNT,gdld:platform-architecture`
 
 ### Cross-Reference Traversal
 
@@ -466,7 +464,7 @@ When source content changes:
 
 ## Concurrency
 
-GDLU files may be written by multiple agents. Follow the same concurrency model as Memory (specs/GDLM-SPEC.md):
+GDLU files may be written by multiple agents:
 
 - **Reads** do not require locks
 - **Appends** use `flock` for file-level locking (microsecond duration)
@@ -532,9 +530,7 @@ All content types use the same three record types. Flexibility comes from field 
 |-------|---------------------|
 | **GDLS** (schemas) | `refs:gdls:TABLE` on `@source` connects docs to the data they describe |
 | **GDL** (data) | `refs:gdl:C001` connects docs to relevant business records |
-| **GDLC** (code) | `refs:gdlc:src/path/file.ts` connects docs to the code they document |
 | **GDLD** (diagrams) | Diagrams visualize knowledge from docs; `refs:gdld:diagram-id` links them |
-| **Memory** | Agent observations about documents go in memory; GDLU is the index, memory is the interpretation |
 
 ---
 
@@ -555,9 +551,7 @@ All content types use the same three record types. Flexibility comes from field 
 |--------|-----------|---------|-------------|
 | GDLS | `.gdls` | Schema maps (tables, relationships) | Positional (`@T`, `@R`, `@PATH`) |
 | GDL | `.gdl` | Structured data records | Key-value (`@type\|key:value`) |
-| GDLC | `.gdlc` | File-level code index | Positional (`@D`, `@F`) |
 | GDLD | `.gdld` | Visual knowledge (diagrams) | Key-value (`@diagram`, `@node`, `@edge`) |
-| Memory | `.gdlm` | Agent knowledge (three-tier) | Key-value (`@memory`, `@anchor`) |
 | **GDLU** | **`.gdlu`** | **Unstructured content index** | **Key-value (`@source`, `@section`, `@extract`)** |
 
 ---

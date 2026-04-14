@@ -1,6 +1,6 @@
 ---
 name: managing-gdl-rules
-description: "Use when creating, reviewing, or maintaining @rule records in rules.gdl files — provides format reference, quality criteria for what makes a rule worth writing, severity calibration, and the gdl_rules_for_file helper. Triggers on: rules.gdl files, 'add a rule', 'create a coding rule', 'enforce this convention', observing a strong codebase convention. NOT for @memory observations, .gdlm files, or general code review."
+description: "Use when creating, reviewing, or maintaining @rule records in rules.gdl files — provides format reference, quality criteria for what makes a rule worth writing, severity calibration, and the gdl_rules_for_file helper. Triggers on: rules.gdl files, 'add a rule', 'create a coding rule', 'enforce this convention', observing a strong codebase convention. NOT for general code review."
 disable-model-invocation: false
 allowed-tools: Read, Grep, Glob, Bash
 context: fork

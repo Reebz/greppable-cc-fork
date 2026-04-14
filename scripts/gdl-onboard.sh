@@ -21,9 +21,8 @@ PLUGIN_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 # --- Defaults ---
 SCOPE="project"
 GDL_ROOT="docs/gdl"
-LAYERS="gdl,gdlc,gdlm,gdld"
+LAYERS="gdl,gdls,gdld"
 SKIP_GITIGNORE=false
-MEMORY="true"
 GDLIGNORE_PATTERNS=""
 
 # --- Usage ---
@@ -34,18 +33,17 @@ Usage: gdl-onboard.sh [OPTIONS]
 Options:
   --scope=project|global   Config file location (default: project)
   --gdl-root=PATH          Where GDL artifacts live (default: docs/gdl)
-  --layers=LAYER1,...       Comma-separated layers to enable (default: gdl,gdlc,gdlm,gdld)
-  --memory=true|false      Enable session memory extraction (default: true)
+  --layers=LAYER1,...       Comma-separated layers to enable (default: gdl,gdls,gdld)
   --skip-gitignore         Skip .gitignore update
   --gdlignore-patterns=P   Comma-separated .gdlignore patterns to write
   --help                   Show this help message
 
-Layers: gdl, gdls, gdlc, gdla, gdlm, gdld, gdlu
+Layers: gdl, gdls, gdla, gdld, gdlu
 
 Examples:
   gdl-onboard.sh
   gdl-onboard.sh --scope=global
-  gdl-onboard.sh --gdl-root=.gdl --layers=gdls,gdlc,gdlm
+  gdl-onboard.sh --gdl-root=.gdl --layers=gdls,gdla,gdld
 EOF
     exit 1
 }
@@ -72,17 +70,6 @@ for arg in "$@"; do
         --skip-gitignore)
             SKIP_GITIGNORE=true
             ;;
-        --memory)
-            echo "Error: --memory requires a value: --memory=true or --memory=false" >&2
-            exit 1
-            ;;
-        --memory=*)
-            MEMORY="${arg#--memory=}"
-            if [[ "$MEMORY" != "true" && "$MEMORY" != "false" ]]; then
-                echo "Error: --memory must be 'true' or 'false'" >&2
-                exit 1
-            fi
-            ;;
         --skip-autopilot)
             # Accepted for backward compatibility but ignored (autopilot file removed)
             ;;
@@ -100,7 +87,7 @@ for arg in "$@"; do
 done
 
 # --- Validate layers ---
-ALL_VALID_LAYERS="gdl gdls gdlc gdla gdlm gdld gdlu"
+ALL_VALID_LAYERS="gdl gdls gdla gdld gdlu"
 IFS=',' read -r -a layer_arr <<< "$LAYERS"
 for layer in "${layer_arr[@]}"; do
     valid=false
@@ -135,14 +122,11 @@ config_content="---
 enabled: true
 layers_gdl: $(layer_enabled gdl && echo true || echo false)
 layers_gdls: $(layer_enabled gdls && echo true || echo false)
-layers_gdlc: $(layer_enabled gdlc && echo true || echo false)
 layers_gdla: $(layer_enabled gdla && echo true || echo false)
-layers_gdlm: $(layer_enabled gdlm && echo true || echo false)
 layers_gdld: $(layer_enabled gdld && echo true || echo false)
 layers_gdlu: $(layer_enabled gdlu && echo true || echo false)
 gdl_root: \"${GDL_ROOT}\"
 discovery_auto_prompt: true
-memory: ${MEMORY}
 ---
 
 # GDL Configuration
@@ -187,11 +171,9 @@ fi
 # --- Step 3: Create gdl_root directory structure ---
 # Map layers to subdirectories
 layer_dirs=""
-layer_enabled gdlc && layer_dirs="$layer_dirs code"
 layer_enabled gdla && layer_dirs="$layer_dirs api"
 layer_enabled gdls && layer_dirs="$layer_dirs schema"
 layer_enabled gdld && layer_dirs="$layer_dirs diagrams"
-layer_enabled gdlm && layer_dirs="$layer_dirs memory"
 layer_enabled gdl  && layer_dirs="$layer_dirs data"
 layer_enabled gdlu && layer_dirs="$layer_dirs unstructured"
 
@@ -200,20 +182,7 @@ for dir in $layer_dirs; do
 done
 echo "  Created directory structure: ${GDL_ROOT}/" >&2
 
-# --- Step 3b: Trigger immediate memory extraction ---
-# After setting memory: true, spawn the extraction hook so any prior
-# session transcripts get processed immediately — no restart needed (#100).
-if [[ "$MEMORY" == "true" ]]; then
-    HOOK_BUNDLE="$PLUGIN_ROOT/scripts/session2gdlm/dist/hook.mjs"
-    if [[ -f "$HOOK_BUNDLE" ]] && command -v node &>/dev/null; then
-        HOOK_LOG=".claude/session2gdlm.log"
-        mkdir -p "$(dirname "$HOOK_LOG")"
-        node "$HOOK_BUNDLE" --cwd="$(pwd)" >>"$HOOK_LOG" 2>&1 &
-        echo "  Triggered memory extraction in background" >&2
-    fi
-fi
-
-# --- Step 3c: Sensitive information advisory ---
+# --- Step 3b: Sensitive information advisory ---
 echo "" >&2
 echo "  Note: GDL artifacts will contain architectural details about your" >&2
 echo "  project (schema structure, endpoint paths, module dependencies," >&2
@@ -229,7 +198,6 @@ if [[ -n "${GDLIGNORE_PATTERNS:-}" ]]; then
       echo "#"
       echo "# Format: [format:]pattern"
       echo "#   No prefix = applies to all bridges"
-      echo "#   gdlc: = code maps only"
       echo "#   gdlu: = document indexes only"
       echo "#"
       echo "# Patterns:"
@@ -253,4 +221,3 @@ echo "GDL onboard complete." >&2
 echo "  Scope: ${SCOPE}" >&2
 echo "  GDL root: ${GDL_ROOT}" >&2
 echo "  Layers: ${LAYERS}" >&2
-echo "  Memory: ${MEMORY}" >&2

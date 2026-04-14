@@ -27,19 +27,6 @@ Options:
   --help    Show this help
 
 Detected bridges:
-  TypeScript             → src2gdlc.sh --lang=typescript
-  JavaScript             → src2gdlc.sh --lang=javascript
-  Python                 → src2gdlc.sh --lang=python
-  Go                     → src2gdlc.sh --lang=go
-  Java                   → src2gdlc.sh --lang=java
-  Rust                   → src2gdlc.sh --lang=rust
-  C#                     → src2gdlc.sh --lang=csharp
-  C                      → src2gdlc.sh --lang=c
-  C++                    → src2gdlc.sh --lang=cpp
-  Ruby                   → src2gdlc.sh --lang=ruby
-  PHP                    → src2gdlc.sh --lang=php
-  Kotlin                 → src2gdlc.sh --lang=kotlin
-  Swift                  → src2gdlc.sh --lang=swift
   SQL DDL                → sql2gdls.sh
   Prisma                 → prisma2gdls.sh
   npm (package.json)     → npm2gdld.sh (--all)
@@ -167,136 +154,6 @@ bridge_languages=()
 bridge_counts=()
 bridge_commands=()
 
-# TypeScript (.ts/.tsx)
-ts_count=$(count_files_by_ext "$TARGET_DIR" ".ts" ".tsx")
-if [[ "$ts_count" -gt 0 ]] && [[ -x "$SCRIPT_DIR/src2gdlc.sh" ]]; then
-  bridges+=("TypeScript")
-  bridge_types+=("code")
-  bridge_languages+=("typescript")
-  bridge_counts+=("$ts_count")
-  bridge_commands+=("bash scripts/src2gdlc.sh <DIR> --output=<OUTPUT>/code/project.gdlc --recursive --lang=typescript --with-docs")
-fi
-
-# JavaScript (.js/.jsx/.mjs/.cjs)
-js_count=$(count_files_by_ext "$TARGET_DIR" ".js" ".jsx" ".mjs" ".cjs")
-if [[ "$js_count" -gt 0 ]] && [[ -x "$SCRIPT_DIR/src2gdlc.sh" ]]; then
-  bridges+=("JavaScript")
-  bridge_types+=("code")
-  bridge_languages+=("javascript")
-  bridge_counts+=("$js_count")
-  bridge_commands+=("bash scripts/src2gdlc.sh <DIR> --output=<OUTPUT>/code/project.gdlc --recursive --lang=javascript --with-docs")
-fi
-
-# Python
-py_count=$(count_files_by_ext "$TARGET_DIR" ".py")
-if [[ "$py_count" -gt 0 ]] && [[ -x "$SCRIPT_DIR/src2gdlc.sh" ]]; then
-  bridges+=("Python")
-  bridge_types+=("code")
-  bridge_languages+=("python")
-  bridge_counts+=("$py_count")
-  bridge_commands+=("bash scripts/src2gdlc.sh <DIR> --output=<OUTPUT>/code/project.gdlc --recursive --lang=python --with-docs")
-fi
-
-# Go
-go_count=$(count_files_by_ext "$TARGET_DIR" ".go")
-if [[ "$go_count" -gt 0 ]] && [[ -x "$SCRIPT_DIR/src2gdlc.sh" ]]; then
-  bridges+=("Go")
-  bridge_types+=("code")
-  bridge_languages+=("go")
-  bridge_counts+=("$go_count")
-  bridge_commands+=("bash scripts/src2gdlc.sh <DIR> --output=<OUTPUT>/code/project.gdlc --recursive --lang=go --with-docs")
-fi
-
-# Java
-java_count=$(count_files_by_ext "$TARGET_DIR" ".java")
-if [[ "$java_count" -gt 0 ]] && [[ -x "$SCRIPT_DIR/src2gdlc.sh" ]]; then
-  bridges+=("Java")
-  bridge_types+=("code")
-  bridge_languages+=("java")
-  bridge_counts+=("$java_count")
-  bridge_commands+=("bash scripts/src2gdlc.sh <DIR> --output=<OUTPUT>/code/project.gdlc --recursive --lang=java --with-docs")
-fi
-
-# Rust
-rs_count=$(count_files_by_ext "$TARGET_DIR" ".rs")
-if [[ "$rs_count" -gt 0 ]] && [[ -x "$SCRIPT_DIR/src2gdlc.sh" ]]; then
-  bridges+=("Rust")
-  bridge_types+=("code")
-  bridge_languages+=("rust")
-  bridge_counts+=("$rs_count")
-  bridge_commands+=("bash scripts/src2gdlc.sh <DIR> --output=<OUTPUT>/code/project.gdlc --recursive --lang=rust --with-docs")
-fi
-
-# C# (.cs)
-cs_count=$(count_files_by_ext "$TARGET_DIR" ".cs")
-if [[ "$cs_count" -gt 0 ]] && [[ -x "$SCRIPT_DIR/src2gdlc.sh" ]]; then
-  bridges+=("C#")
-  bridge_types+=("code")
-  bridge_languages+=("csharp")
-  bridge_counts+=("$cs_count")
-  bridge_commands+=("bash scripts/src2gdlc.sh <DIR> --output=<OUTPUT>/code/project.gdlc --recursive --lang=csharp --with-docs")
-fi
-
-# C (.c/.h)
-c_count=$(count_files_by_ext "$TARGET_DIR" ".c" ".h")
-if [[ "$c_count" -gt 0 ]] && [[ -x "$SCRIPT_DIR/src2gdlc.sh" ]]; then
-  bridges+=("C")
-  bridge_types+=("code")
-  bridge_languages+=("c")
-  bridge_counts+=("$c_count")
-  bridge_commands+=("bash scripts/src2gdlc.sh <DIR> --output=<OUTPUT>/code/project.gdlc --recursive --lang=c --with-docs")
-fi
-
-# C++ (.cpp/.hpp/.cc/.hh/.cxx/.hxx)
-cpp_count=$(count_files_by_ext "$TARGET_DIR" ".cpp" ".hpp" ".cc" ".hh" ".cxx" ".hxx")
-if [[ "$cpp_count" -gt 0 ]] && [[ -x "$SCRIPT_DIR/src2gdlc.sh" ]]; then
-  bridges+=("C++")
-  bridge_types+=("code")
-  bridge_languages+=("cpp")
-  bridge_counts+=("$cpp_count")
-  bridge_commands+=("bash scripts/src2gdlc.sh <DIR> --output=<OUTPUT>/code/project.gdlc --recursive --lang=cpp --with-docs")
-fi
-
-# Ruby (.rb)
-rb_count=$(count_files_by_ext "$TARGET_DIR" ".rb")
-if [[ "$rb_count" -gt 0 ]] && [[ -x "$SCRIPT_DIR/src2gdlc.sh" ]]; then
-  bridges+=("Ruby")
-  bridge_types+=("code")
-  bridge_languages+=("ruby")
-  bridge_counts+=("$rb_count")
-  bridge_commands+=("bash scripts/src2gdlc.sh <DIR> --output=<OUTPUT>/code/project.gdlc --recursive --lang=ruby --with-docs")
-fi
-
-# PHP (.php)
-php_count=$(count_files_by_ext "$TARGET_DIR" ".php")
-if [[ "$php_count" -gt 0 ]] && [[ -x "$SCRIPT_DIR/src2gdlc.sh" ]]; then
-  bridges+=("PHP")
-  bridge_types+=("code")
-  bridge_languages+=("php")
-  bridge_counts+=("$php_count")
-  bridge_commands+=("bash scripts/src2gdlc.sh <DIR> --output=<OUTPUT>/code/project.gdlc --recursive --lang=php --with-docs")
-fi
-
-# Kotlin (.kt/.kts)
-kt_count=$(count_files_by_ext "$TARGET_DIR" ".kt" ".kts")
-if [[ "$kt_count" -gt 0 ]] && [[ -x "$SCRIPT_DIR/src2gdlc.sh" ]]; then
-  bridges+=("Kotlin")
-  bridge_types+=("code")
-  bridge_languages+=("kotlin")
-  bridge_counts+=("$kt_count")
-  bridge_commands+=("bash scripts/src2gdlc.sh <DIR> --output=<OUTPUT>/code/project.gdlc --recursive --lang=kotlin --with-docs")
-fi
-
-# Swift (.swift)
-swift_count=$(count_files_by_ext "$TARGET_DIR" ".swift")
-if [[ "$swift_count" -gt 0 ]] && [[ -x "$SCRIPT_DIR/src2gdlc.sh" ]]; then
-  bridges+=("Swift")
-  bridge_types+=("code")
-  bridge_languages+=("swift")
-  bridge_counts+=("$swift_count")
-  bridge_commands+=("bash scripts/src2gdlc.sh <DIR> --output=<OUTPUT>/code/project.gdlc --recursive --lang=swift --with-docs")
-fi
-
 # SQL DDL
 sql_count=$(count_sql_with_ddl "$TARGET_DIR")
 if [[ "$sql_count" -gt 0 ]] && [[ -x "$SCRIPT_DIR/sql2gdls.sh" ]]; then
@@ -382,9 +239,6 @@ if [[ "$ALL_BRIDGES" = true ]] && [[ -f "$TARGET_DIR/pom.xml" ]] && [[ -x "$SCRI
   bridge_commands+=("bash scripts/maven2gdld.sh <DIR>/pom.xml --output=<OUTPUT>/diagram")
 fi
 
-# git2gdlm: DEPRECATED — benchmark showed +100% tool calls, +26% cost vs no memory.
-# Reformatted git log doesn't help agents. Use session2gdlm for quality memory. See #140.
-
 # v1: excluded from default — use --all to include
 # Markdown docs (.md files)
 if [[ "$ALL_BRIDGES" = true ]]; then
@@ -445,44 +299,6 @@ suggested_exclusions=()
 exclusion_formats=()
 exclusion_reasons=()
 
-# shadcn detection: components.json with shadcn schema
-if [[ -f "$TARGET_DIR/components.json" ]]; then
-  # Check for shadcn schema reference or aliases.ui
-  if grep -q 'shadcn' "$TARGET_DIR/components.json" 2>/dev/null || \
-     grep -q '"ui"' "$TARGET_DIR/components.json" 2>/dev/null; then
-    # Try to extract the ui path from aliases
-    ui_path=""
-    if command -v jq >/dev/null 2>&1; then
-      ui_path=$(jq -r '.aliases.ui // empty' "$TARGET_DIR/components.json" 2>/dev/null) || true
-    fi
-    # Resolve @/ alias to relative path
-    if [[ -n "$ui_path" ]]; then
-      ui_path="${ui_path#@/}"  # Strip @/ prefix
-      ui_path="${ui_path#./}"  # Strip ./ prefix
-    else
-      ui_path="components/ui"  # Fallback default
-    fi
-    suggested_exclusions+=("${ui_path}/")
-    exclusion_formats+=("gdlc")
-    exclusion_reasons+=("shadcn detected (components.json)")
-  fi
-fi
-
-# Storybook detection: .storybook/ directory
-if [[ -d "$TARGET_DIR/.storybook" ]]; then
-  suggested_exclusions+=(".storybook/")
-  exclusion_formats+=("gdlc")
-  exclusion_reasons+=("Storybook config directory")
-
-  # Also check for story files
-  story_count=0
-  story_count=$(find "$TARGET_DIR" -type f \( -name "*.stories.tsx" -o -name "*.stories.ts" -o -name "*.stories.jsx" -o -name "*.stories.js" \) -print -quit 2>/dev/null | wc -l | tr -d ' ') || true
-  if [[ "$story_count" -gt 0 ]]; then
-    suggested_exclusions+=("**/*.stories.*")
-    exclusion_formats+=("gdlc")
-    exclusion_reasons+=("Storybook story files")
-  fi
-fi
 
 # --- Output ---
 bridge_count=${#bridges[@]}
