@@ -1,12 +1,12 @@
 ---
-description: Search all 7 GDL layers for a topic with cross-layer formatted output. Use for quick lookups across the knowledge base.
+description: Search all GDL layers for a topic with cross-layer formatted output. Use for quick lookups across the knowledge base.
 disable-model-invocation: false
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
 # /greppable:about — Cross-Layer Search
 
-Search across all 7 GDL layers for a topic. Returns formatted results grouped by layer.
+Search across all GDL layers for a topic. Returns formatted results grouped by layer.
 
 ## Usage
 
@@ -25,8 +25,8 @@ gdl_about "$TOPIC" "${DIR:-.}" ${SUMMARY:+--summary} ${REGEX:+--regex} ${IGNORE_
 
 - `TOPIC` (required): The search term — literal string by default, regex pattern with `--regex`
 - `directory` (optional): Search scope, defaults to current directory
-- `--layer=LAYER`: Filter to specific layer (gdl, gdls, gdlc, gdla, gdld, gdlm, gdlu)
-- `--exclude-layer=LAYERS`: Skip comma-separated layers (e.g., `--exclude-layer=gdlm,gdlu`). Complement of `--layer`.
+- `--layer=LAYER`: Filter to specific layer (gdl, gdls, gdla, gdld, gdlu)
+- `--exclude-layer=LAYERS`: Skip comma-separated layers (e.g., `--exclude-layer=gdlu`). Complement of `--layer`.
 - `--summary`: Compact output with counts only
 - `--regex` / `-E`: Use extended regex instead of literal matching (enables patterns like `(auth|security)`, `^@T.*TOPIC`, `type:decision`)
 - `--ignore-case` / `-i`: Case-insensitive search (finds `GL_ACCOUNT` when searching `gl_account`)
@@ -41,7 +41,7 @@ gdl_about "$TOPIC" "${DIR:-.}" ${SUMMARY:+--summary} ${REGEX:+--regex} ${IGNORE_
 
 ```
 /greppable:about GL_ACCOUNT
-/greppable:about authentication --layer=gdlc
+/greppable:about authentication --layer=gdls
 /greppable:about GL_ACCOUNT --summary
 ```
 
@@ -57,12 +57,9 @@ gdl_about "$TOPIC" "${DIR:-.}" ${SUMMARY:+--summary} ${REGEX:+--regex} ${IGNORE_
 # Filter to specific record types
 /greppable:about '^@T.*Customer' . --regex --layer=gdls
 
-# Find field values across layers
-/greppable:about 'type:decision' . --regex --layer=gdlm
-
 # Case-insensitive entity lookup
 /greppable:about parser . --ignore-case
 
-# Search everything except memory and diagrams
-/greppable:about 'Customer' . --exclude-layer=gdlm,gdld
+# Search everything except diagrams
+/greppable:about 'Customer' . --exclude-layer=gdld
 ```

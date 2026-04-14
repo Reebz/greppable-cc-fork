@@ -497,12 +497,12 @@ Tables: grep "@T TABLE" with after_context=30. PK: |PK|, FK: |FK|
 
 GDLS and its siblings are formats in the same language family:
 
-| | GDLS | GDL | GDLC | GDLU |
-|--|------|-----|------|------|
-| Purpose | Schema, relationships, enums, structural maps | Data records and agent memory | File-level code index | Unstructured content index |
-| Fields | Positional (5-field columns) | Key:value (self-describing) | Positional | Key:value (`@source`, `@section`, `@extract`) |
-| Extension | `.gdls` | `.gdl` | `.gdlc` | `.gdlu` |
-| Records | `@D`, `@T`, `@R`, `@PATH`, `@E` | `@type\|key:value` | `@D`, `@F` | `@source`, `@section`, `@extract` |
+| | GDLS | GDL | GDLU |
+|--|------|-----|------|
+| Purpose | Schema, relationships, enums, structural maps | Data records | Unstructured content index |
+| Fields | Positional (5-field columns) | Key:value (self-describing) | Key:value (`@source`, `@section`, `@extract`) |
+| Extension | `.gdls` | `.gdl` | `.gdlu` |
+| Records | `@D`, `@T`, `@R`, `@PATH`, `@E` | `@type\|key:value` | `@source`, `@section`, `@extract` |
 | Shared | `@` prefix, `\|` delimiter, line-oriented, grep-first |
 
-GDLS tells agents what systems look like and how they connect. GDL holds the data and memories agents work with. GDLC is a file-level code index (`@D` = directory, `@F` = file). GDLU indexes unstructured content (PDFs, transcripts, media) for grep-based retrieval.
+GDLS tells agents what systems look like and how they connect. GDL holds the data agents work with. GDLU indexes unstructured content (PDFs, transcripts, media) for grep-based retrieval.

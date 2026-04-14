@@ -43,7 +43,6 @@ Create or update a GDLD architecture diagram from current context.
 ## Conversion Shortcut
 
 Can also convert existing formats to diagrams:
-- `.gdlc` → `.gdld`: `bash "${CLAUDE_PLUGIN_ROOT}/scripts/gdlc2gdld.sh" <file.gdlc>`
 - `.gdls` → `.gdld`: `bash "${CLAUDE_PLUGIN_ROOT}/scripts/gdls2gdld.sh" <file.gdls>`
 - `.gdlu` → `.gdld`: `bash "${CLAUDE_PLUGIN_ROOT}/scripts/gdlu2gdld.sh" <file.gdlu>`
 

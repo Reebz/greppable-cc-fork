@@ -10,7 +10,7 @@ allowed-tools: Read, Bash, Write, Edit, Glob, Grep, AskUserQuestion
 
 ### `/greppable:ignore add [format:]<pattern>`
 Append a pattern to `.gdlignore`. Creates the file with header comments if it doesn't exist.
-- Example: `/greppable:ignore add gdlc:components/ui/`
+- Example: `/greppable:ignore add gdlu:legacy-docs/`
 - Example: `/greppable:ignore add **/*.stories.tsx`
 
 ### `/greppable:ignore remove <pattern>`
@@ -40,7 +40,6 @@ bash "${CLAUDE_PLUGIN_ROOT}/scripts/gdl-lint.sh" .gdlignore
 - Lines starting with `#` are comments
 - Blank lines are ignored
 - `pattern` (no prefix) applies to all bridges
-- `gdlc:pattern` applies only to code map scanning
 - `gdlu:pattern` applies only to document indexing
 - Trailing `/` means directory-only match
 - `*` matches within a path segment, `**` matches across segments

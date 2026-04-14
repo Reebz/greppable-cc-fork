@@ -1,5 +1,5 @@
 ---
-description: Full codebase scan — generates code maps, architecture diagrams, and conditional schema maps and API contracts. Token-intensive, runs as subagent.
+description: Full codebase scan — generates architecture diagrams, and conditional schema maps and API contracts. Token-intensive, runs as subagent.
 disable-model-invocation: false
 context: fork
 agent: general-purpose
@@ -27,15 +27,13 @@ Scan the project structure and generate GDL artifacts that document the codebase
    ```bash
    bash "${CLAUDE_PLUGIN_ROOT}/scripts/gdl-prescan.sh" <target_dir> --json
    ```
-   This detects which bridge tools can generate skeletons automatically (code maps via src2gdlc, schema maps via sql2gdls/prisma2gdls/db2gdls).
+   This detects which bridge tools can generate skeletons automatically (schema maps via sql2gdls/prisma2gdls/db2gdls, API contracts via openapi2gdla/graphql2gdla).
 
 3. Report scope and bridge plan:
    ```
    Scanning project structure...
 
    Bridge detection found:
-     - TypeScript: 142 files → src2gdlc (automatic code maps)
-     - Python: 24 files → src2gdlc (automatic code maps)
      - SQL migrations: 3 files → sql2gdls (automatic schema maps)
      - OpenAPI specs: 2 files → openapi2gdla (automatic API contracts)
      - GraphQL schemas: 1 file → graphql2gdla (automatic API contracts)
@@ -44,7 +42,7 @@ Scan the project structure and generate GDL artifacts that document the codebase
      1. Run bridge tools for automatic skeleton generation (fast, scripted)
      2. Agent enriches skeletons with descriptions and relationships
      3. Generate architecture diagrams (.gdld) from codebase understanding
-     4. Synthesize: concept anchors, overview diagram, and proposed coding rules
+     4. Synthesize: overview diagram and proposed coding rules
 
    This is a token-intensive process. Proceed? [yes / cancel]
    ```
@@ -52,9 +50,6 @@ Scan the project structure and generate GDL artifacts that document the codebase
 4. **Run bridge tools** (scripted, fast):
    For each bridge detected by prescan, execute the recommended command with actual paths substituted:
    ```bash
-   # Example: Code maps
-   bash "${CLAUDE_PLUGIN_ROOT}/scripts/src2gdlc.sh" <target_dir> --output=<gdl_root>/code --recursive --lang=typescript
-   bash "${CLAUDE_PLUGIN_ROOT}/scripts/src2gdlc.sh" <target_dir> --output=<gdl_root>/code --recursive --lang=python
    # Example: Schema maps (iterate over individual files)
    for f in <migrations_dir>/*.sql; do bash "${CLAUDE_PLUGIN_ROOT}/scripts/sql2gdls.sh" "$f" --output=<gdl_root>/schema; done
    for f in <schema_dir>/*.prisma; do bash "${CLAUDE_PLUGIN_ROOT}/scripts/prisma2gdls.sh" "$f" --output=<gdl_root>/schema; done
@@ -78,8 +73,8 @@ Report progress at each major stage. Use this exact format so users can track th
 
 **After each bridge tool runs:**
 ```
-[2/5] Bridge: src2gdlc — generated N code map(s)
 [2/5] Bridge: sql2gdls — generated N schema map(s)
+[2/5] Bridge: openapi2gdla — generated N API contract(s)
 ```
 
 **After skeleton generation is complete:**
@@ -89,7 +84,7 @@ Report progress at each major stage. Use this exact format so users can track th
 
 **During AI enrichment:**
 ```
-[4/5] Enriching: module_name.gdlc (N of M)
+[4/5] Enriching artifacts (N of M)
 ```
 
 **After completion:**
@@ -103,23 +98,9 @@ Always report progress to the user directly in your response text. Do not suppre
 
 1. Run `bash "${CLAUDE_PLUGIN_ROOT}/scripts/gdl-lint.sh" --all <gdl_root> --strict` on all generated files
 2. Report: "Created X files across Y layers. Run `/greppable:status` to see inventory."
-3. **Generate seed memories** — create 3-5 @memory records capturing:
-   - **Architecture observation**: "Project uses [pattern/framework] — key modules are [X, Y, Z]"
-   - **Scale observation**: "Codebase has [N] modules, [M] dependencies — [small/medium/large] scale"
-   - **Convention observation**: "Project follows [naming/structure] convention — [specifics]"
-   - **Gap observation** (if found): "No [type] coverage for [area] — candidate for future indexing"
+**Note:** Steps 3-4 only apply to full-project scans. If `$ARGUMENTS` specified a subdirectory or focus area, skip to the final report — the discovery agent will not have produced activation artifacts.
 
-   First ensure the memory directory and file exist:
-   `bash -c 'mkdir -p memory/active && touch memory/active/seed.gdlm'`
-
-   Then for each seed memory:
-   `bash -c 'source "${CLAUDE_PLUGIN_ROOT}/scripts/gdl-tools.sh" && gdl_new memory --agent=discover --subject="[title]" --detail="[specifics]" --type=observation --tags=architecture,seed --file=memory/active/seed.gdlm --append'`
-
-   These seed memories bootstrap the memory layer so future agents have immediate context.
-
-**Note:** Steps 4-5 only apply to full-project scans. If `$ARGUMENTS` specified a subdirectory or focus area, skip to the final report — the discovery agent will not have produced activation artifacts.
-
-4. **Handle proposed rules** — Parse the agent's report for the `PROPOSED_RULES:` / `END_RULES` block. If rules were proposed, present them for user confirmation:
+3. **Handle proposed rules** — Parse the agent's report for the `PROPOSED_RULES:` / `END_RULES` block. If rules were proposed, present them for user confirmation:
    ```
    The discovery agent proposed these coding rules based on observed conventions:
 
@@ -146,10 +127,9 @@ Always report progress to the user directly in your response text. Do not suppre
    ```
    Then validate: `bash "${CLAUDE_PLUGIN_ROOT}/scripts/gdl-lint.sh" <gdl_root>/data/rules.gdl`
 
-5. **Report activation summary**:
+4. **Report activation summary**:
    ```
    Activation:
-     - anchors.gdlm: N concept anchors (auth, billing, api, ...)
      - architecture-overview.gdld: overview diagram with N nodes
      - rules.gdl: N coding rules confirmed (or "skipped" / "none proposed")
 

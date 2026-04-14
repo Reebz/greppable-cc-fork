@@ -1,6 +1,6 @@
 ---
 name: querying-gdl-data
-description: "Use when working with structured business data records — orders, invoices, products, or any @type records in .gdl files. Covers: filtering records by field values, aggregating data by region/status/category, cross-referencing between record types, extracting specific fields, or converting GDL data to CSV/JSON. Triggers on: \"show me all orders over X\", \"filter by status\", \"aggregate by region\", business data queries, or direct .gdl file operations. NOT for SQL database queries, .gdls schema maps, or .gdlm memory files."
+description: "Use when working with structured business data records — orders, invoices, products, or any @type records in .gdl files. Covers: filtering records by field values, aggregating data by region/status/category, cross-referencing between record types, extracting specific fields, or converting GDL data to CSV/JSON. Triggers on: \"show me all orders over X\", \"filter by status\", \"aggregate by region\", business data queries, or direct .gdl file operations. NOT for SQL database queries or .gdls schema maps."
 disable-model-invocation: false
 allowed-tools: Read, Grep, Glob, Bash
 context: fork
@@ -81,7 +81,7 @@ source "${CLAUDE_PLUGIN_ROOT}/scripts/gdl-tools.sh"
 | `gdl_about` | `gdl_about TOPIC [dir] [--layer=L] [--exclude-layer=L] [--summary] [--regex] [--ignore-case]` | Search across all GDL layers for TOPIC |
 
 **Flags:**
-- `--layer=gdl|gdls|gdlc|gdla|gdld|gdlm|gdlu` — restrict to one layer
+- `--layer=gdl|gdls|gdla|gdld|gdlu` — restrict to one layer
 - `--exclude-layer=LAYERS` — skip comma-separated layers
 - `--summary` — show match counts only, no record content
 - `--regex` / `-E` — extended regex matching
@@ -247,14 +247,14 @@ done
 
 ```bash
 echo "=== File counts ==="
-for ext in gdl gdls gdlc gdla gdld gdlm gdlu; do
+for ext in gdl gdls gdla gdld gdlu; do
   count=$(find . -name "*.$ext" | wc -l | tr -d ' ')
   echo "  .$ext: $count files"
 done
 echo "=== Lint ==="
 bash "${CLAUDE_PLUGIN_ROOT}/scripts/gdl-lint.sh" --all . --exclude='*/tests/fixtures/*'
 echo "=== Recent changes ==="
-git log --oneline -5 -- '*.gdl' '*.gdls' '*.gdlc' '*.gdla' '*.gdld' '*.gdlm' '*.gdlu'
+git log --oneline -5 -- '*.gdl' '*.gdls' '*.gdla' '*.gdld' '*.gdlu'
 ```
 
 ### Validate Before Commit
@@ -275,7 +275,6 @@ bash "${CLAUDE_PLUGIN_ROOT}/scripts/gdl-diff.sh" old.gdl new.gdl
 
 ```bash
 source "${CLAUDE_PLUGIN_ROOT}/scripts/gdl-tools.sh"
-gdl_new memory --agent=sf-042 --subject=GL_ACCOUNT --detail="New column" --file=memory/active/systems.gdlm --append
 gdl_new source --path=doc.pdf --format=pdf --type=contract --summary="Acme MSA" --file=data.gdlu --append
 ```
 
